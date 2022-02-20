@@ -1,0 +1,23 @@
+baseURL = 'https://superMDguy.github.io/'
+languageCode = 'en-us'
+title = 'My Homepage'
+author = 'Matthew Dangerfield'
+theme = 'paper'
+
+[params]
+  twitter = 'superMDguy'
+  github = 'superMDguy'
+
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 10
+  
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 10
+
