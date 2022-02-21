@@ -1,0 +1,88 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>How to control bootstrap’s css - My Homepage</title>
+<meta name=description content="Source: https://teckstack.com
+In our Angular 4 project, we’re using a datepicker from ng-bootstrap. It has a lot of features (such as date ranges, minimum/maximum date validation, etc.) that are really useful to us. The only issue? As you can probably tell from the name, it uses bootstrap.
+Bootstrap works great when it’s used to style an entire app. But as soon as we included it in our app, it changed a ton of our styling.">
+<meta name=author content="Matthew Dangerfield">
+<link rel="preload stylesheet" as=style href=https://superMDguy.github.io/app.min.css>
+<link rel="preload stylesheet" as=style href=https://superMDguy.github.io/an-old-hope.min.css>
+<script defer src=https://superMDguy.github.io/highlight.min.js onload=hljs.initHighlightingOnLoad()></script>
+<link rel=preload as=image href=https://superMDguy.github.io/theme.png>
+<link rel=preload as=image href=https://superMDguy.github.io/twitter.svg>
+<link rel=preload as=image href=https://superMDguy.github.io/github.svg>
+<link rel=icon href=https://superMDguy.github.io/favicon.ico>
+<link rel=apple-touch-icon href=https://superMDguy.github.io/apple-touch-icon.png>
+<meta name=generator content="Hugo 0.92.2">
+<meta property="og:title" content="How to control bootstrap’s css">
+<meta property="og:description" content="Source: https://teckstack.com
+In our Angular 4 project, we’re using a datepicker from ng-bootstrap. It has a lot of features (such as date ranges, minimum/maximum date validation, etc.) that are really useful to us. The only issue? As you can probably tell from the name, it uses bootstrap.
+Bootstrap works great when it’s used to style an entire app. But as soon as we included it in our app, it changed a ton of our styling.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://superMDguy.github.io/post/2017-08-10_how-to-control-bootstraps-css/"><meta property="og:image" content="https://superMDguy.github.io/posts/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2017-08-10T17:05:43+00:00">
+<meta property="article:modified_time" content="2019-08-23T14:14:29-07:00">
+<meta itemprop=name content="How to control bootstrap’s css">
+<meta itemprop=description content="Source: https://teckstack.com
+In our Angular 4 project, we’re using a datepicker from ng-bootstrap. It has a lot of features (such as date ranges, minimum/maximum date validation, etc.) that are really useful to us. The only issue? As you can probably tell from the name, it uses bootstrap.
+Bootstrap works great when it’s used to style an entire app. But as soon as we included it in our app, it changed a ton of our styling."><meta itemprop=datePublished content="2017-08-10T17:05:43+00:00">
+<meta itemprop=dateModified content="2019-08-23T14:14:29-07:00">
+<meta itemprop=wordCount content="181"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg">
+<meta itemprop=keywords content>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://superMDguy.github.io/posts/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg">
+<meta name=twitter:title content="How to control bootstrap’s css">
+<meta name=twitter:description content="Source: https://teckstack.com
+In our Angular 4 project, we’re using a datepicker from ng-bootstrap. It has a lot of features (such as date ranges, minimum/maximum date validation, etc.) that are really useful to us. The only issue? As you can probably tell from the name, it uses bootstrap.
+Bootstrap works great when it’s used to style an entire app. But as soon as we included it in our app, it changed a ton of our styling.">
+</head>
+<body class=not-ready data-menu=true>
+<header class=header>
+<p class=logo>
+<a class=site-name href=https://superMDguy.github.io/>My Homepage</a>
+</p>
+<script>let bodyClx=document.body.classList,btnDark=document.querySelector('.btn-dark'),sysDark=window.matchMedia('(prefers-color-scheme: dark)'),darkVal=localStorage.getItem('dark'),setDark=a=>{bodyClx[a?'add':'remove']('dark'),localStorage.setItem('dark',a?'yes':'no')};setDark(darkVal?darkVal==='yes':sysDark.matches),requestAnimationFrame(()=>bodyClx.remove('not-ready')),btnDark.addEventListener('click',()=>setDark(!bodyClx.contains('dark'))),sysDark.addEventListener('change',a=>setDark(a.matches))</script>
+<nav class=menu>
+<a href=/about/>About</a>
+</nav>
+<nav class=social>
+<a class=twitter style=--url:url(./twitter.svg) href=https://twitter.com/superMDguy target=_blank></a>
+<a class=github style=--url:url(./github.svg) href=https://github.com/superMDguy target=_blank></a>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-title>
+<p>
+<time>Aug 10, 2017</time>
+<span>Matthew Dangerfield</span>
+</p>
+<h1>How to control bootstrap’s css</h1>
+</header>
+<section class=post-content><p><img src=/post/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg alt=image></p>
+<p>Source: <a href=https://teckstack.com>https://teckstack.com</a></p>
+<p>In our Angular 4 project, we’re using a datepicker from <a href=https://ng-bootstrap.github.io/#/home>ng-bootstrap</a>. It has a lot of features (such as date ranges, minimum/maximum date validation, etc.) that are really useful to us. The only issue? As you can probably tell from the name, it uses bootstrap.</p>
+<p>Bootstrap works great when it’s used to style an entire app. But as soon as we included it in our app, it changed a ton of our styling. I couldn’t just increase specificity in our styles, because bootstrap was targeting tags that we hadn’t styled at all. I thought I would have to manually create style rules that reverted everything that bootstrap added.</p>
+<p>But then, I had a better idea. We use bootstrap by installing its <a href=https://www.npmjs.com/package/bootstrap>npm package</a>, and then @import-ing it into in our <code>app.component.scss</code> file. So, I crossed my fingers, and added a couple of lines around the import:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-scss data-lang=scss><span style=color:#a6e22e>.allow-bootstrap</span> {
+  <span style=color:#66d9ef>@import</span> <span style=color:#e6db74>&#34;~bootstrap/dist/css/bootstrap.min&#34;</span>;
+}
+</code></pre></div><p>Surprisingly, it worked! Now, everywhere I use an ng-bootstrap component, I just add the <code>allow-bootstrap</code> class, and it works perfectly, without changing styles anywhere else on the page.</p>
+</section>
+<nav class=post-nav>
+<a class=prev href=https://superMDguy.github.io/post/2017-11-09_how-to-build-your-own-reactivity-system/><span>←</span><span>How to Build Your Own Reactivity System</span></a>
+</nav>
+</article>
+</main>
+<footer class=footer>
+<p>&copy; 2022 <a href=https://superMDguy.github.io/>My Homepage</a></p>
+<p>Powered by <a href=https://gohugo.io/ rel=noopener target=_blank>Hugo️️</a>️</p>
+<p>
+<a href=https://github.com/nanxiaobei/hugo-paper rel=noopener target=_blank>Paper 5.1</a>
+</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>A solution to async boilerplate in JavaScript ✨ - My Homepage</title>
+<meta name=description content="Source
+Have you ever written code that looks like this?
+function loadStuff() { state.loading = true; fetch(&#34;//myapi.com/stuff&#34;) .then((res) => res.json()) .then((data) => { state.loading = false; state.stuff = data; }); } Maybe you also have error handling or a fancy delayed spinner that adds even more complexity. Writing the same code for every single async task in your project can add a lot of boilerplate, especially if you have a lot of HTTP requests in your application.">
+<meta name=author content="Matthew Dangerfield">
+<link rel="preload stylesheet" as=style href=https://superMDguy.github.io/app.min.css>
+<link rel="preload stylesheet" as=style href=https://superMDguy.github.io/an-old-hope.min.css>
+<script defer src=https://superMDguy.github.io/highlight.min.js onload=hljs.initHighlightingOnLoad()></script>
+<link rel=preload as=image href=https://superMDguy.github.io/theme.png>
+<link rel=preload as=image href=https://superMDguy.github.io/twitter.svg>
+<link rel=preload as=image href=https://superMDguy.github.io/github.svg>
+<link rel=icon href=https://superMDguy.github.io/favicon.ico>
+<link rel=apple-touch-icon href=https://superMDguy.github.io/apple-touch-icon.png>
+<meta name=generator content="Hugo 0.92.2">
+<meta property="og:title" content="A solution to async boilerplate in JavaScript ✨">
+<meta property="og:description" content="Source
+Have you ever written code that looks like this?
+function loadStuff() { state.loading = true; fetch(&#34;//myapi.com/stuff&#34;) .then((res) => res.json()) .then((data) => { state.loading = false; state.stuff = data; }); } Maybe you also have error handling or a fancy delayed spinner that adds even more complexity. Writing the same code for every single async task in your project can add a lot of boilerplate, especially if you have a lot of HTTP requests in your application.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://superMDguy.github.io/post/2018-10-10_solution-to-async-boilerplate-in-javascript-/"><meta property="og:image" content="https://superMDguy.github.io/posts/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2018-10-10T00:01:46+00:00">
+<meta property="article:modified_time" content="2019-08-23T14:14:32-07:00">
+<meta itemprop=name content="A solution to async boilerplate in JavaScript ✨">
+<meta itemprop=description content="Source
+Have you ever written code that looks like this?
+function loadStuff() { state.loading = true; fetch(&#34;//myapi.com/stuff&#34;) .then((res) => res.json()) .then((data) => { state.loading = false; state.stuff = data; }); } Maybe you also have error handling or a fancy delayed spinner that adds even more complexity. Writing the same code for every single async task in your project can add a lot of boilerplate, especially if you have a lot of HTTP requests in your application."><meta itemprop=datePublished content="2018-10-10T00:01:46+00:00">
+<meta itemprop=dateModified content="2019-08-23T14:14:32-07:00">
+<meta itemprop=wordCount content="692"><meta itemprop=image content="https://superMDguy.github.io/posts/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg">
+<meta itemprop=keywords content>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://superMDguy.github.io/posts/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg">
+<meta name=twitter:title content="A solution to async boilerplate in JavaScript ✨">
+<meta name=twitter:description content="Source
+Have you ever written code that looks like this?
+function loadStuff() { state.loading = true; fetch(&#34;//myapi.com/stuff&#34;) .then((res) => res.json()) .then((data) => { state.loading = false; state.stuff = data; }); } Maybe you also have error handling or a fancy delayed spinner that adds even more complexity. Writing the same code for every single async task in your project can add a lot of boilerplate, especially if you have a lot of HTTP requests in your application.">
+</head>
+<body class=not-ready data-menu=true>
+<header class=header>
+<p class=logo>
+<a class=site-name href=https://superMDguy.github.io/>My Homepage</a>
+</p>
+<script>let bodyClx=document.body.classList,btnDark=document.querySelector('.btn-dark'),sysDark=window.matchMedia('(prefers-color-scheme: dark)'),darkVal=localStorage.getItem('dark'),setDark=a=>{bodyClx[a?'add':'remove']('dark'),localStorage.setItem('dark',a?'yes':'no')};setDark(darkVal?darkVal==='yes':sysDark.matches),requestAnimationFrame(()=>bodyClx.remove('not-ready')),btnDark.addEventListener('click',()=>setDark(!bodyClx.contains('dark'))),sysDark.addEventListener('change',a=>setDark(a.matches))</script>
+<nav class=menu>
+<a href=/about/>About</a>
+</nav>
+<nav class=social>
+<a class=twitter style=--url:url(./twitter.svg) href=https://twitter.com/superMDguy target=_blank></a>
+<a class=github style=--url:url(./github.svg) href=https://github.com/superMDguy target=_blank></a>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-title>
+<p>
+<time>Oct 10, 2018</time>
+<span>Matthew Dangerfield</span>
+</p>
+<h1>A solution to async boilerplate in JavaScript ✨</h1>
+</header>
+<section class=post-content><p><img src=/post/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg alt=image></p>
+<p><a href=https://en.wikipedia.org/wiki/Tuxedo#/media/File:Dinner_Jackets,_1898..jpg>Source</a></p>
+<p>Have you ever written code that looks like this?</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>loadStuff</span>() {
+  <span style=color:#a6e22e>state</span>.<span style=color:#a6e22e>loading</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>true</span>;
+  <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>&#34;//myapi.com/stuff&#34;</span>)
+    .<span style=color:#a6e22e>then</span>((<span style=color:#a6e22e>res</span>) =&gt; <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>json</span>())
+    .<span style=color:#a6e22e>then</span>((<span style=color:#a6e22e>data</span>) =&gt; {
+      <span style=color:#a6e22e>state</span>.<span style=color:#a6e22e>loading</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>false</span>;
+      <span style=color:#a6e22e>state</span>.<span style=color:#a6e22e>stuff</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>data</span>;
+    });
+}
+</code></pre></div><p>Maybe you also have error handling or a fancy delayed spinner that adds even more complexity. Writing the same code for every single async task in your project can add a lot of boilerplate, especially if you have a lot of HTTP requests in your application.</p>
+<p>Since this is such a common problem, <a href=https://medium.com/stashaway-engineering/react-redux-tips-better-way-to-handle-loading-flags-in-your-reducers-afda42a804c6>several</a> <a href=https://medium.com/@lachlanmiller_52885/a-pattern-to-handle-ajax-requests-in-vuex-2d69bc2f8984>solutions</a> <a href=https://github.com/f/vue-wait>have</a> <a href=https://gist.github.com/ddanger/21d7f4bd3580d2041b7c56ca04b25b8b>already</a> <a href=https://medium.com/@Farzad_YZ/handle-loadings-in-react-by-using-higher-order-components-2ee8de9c3deb>been</a> <a href=https://github.com/abdullah/vuex-module-generator>proposed</a>. In fact, the React team is currently working on building a solution into React itself, through <a href=https://medium.com/@baphemot/understanding-react-suspense-1c73b4b0b1e6>React Suspense</a>. With all these potential solutions, it might seem like <code>isLoading</code> boilerplate is a solved problem.</p>
+<p>However, almost all of these solutions are tied to a framework. This isn’t necessarily a problem — frameworks can be great! However, it’d be better to have a solution that works with pure JavaScript. This would make it so you can track the state of async requests in any situation: whether it’s in your UI framework of choice, Vanilla JS, or your favorite state management solution.</p>
+<p>For example, I do a lot of work with Vue, and I found solutions that worked well with Vuex. But, they wouldn’t work at all if I wanted to track the state of request in a component’s state instead of the global store. There’s a similar issue with most of the React solutions. A pure JavaScript solution, on the other hand, would be able to handle all the complexities of async tasks while still being flexible enough to work with almost all frontend technology stacks.</p>
+<p>I recently released <a href=https://github.com/superMDguy/tuxi>tuxi</a>, which aims to solve the async state boilerplate problem, while still meeting the flexibility requirements I outlined. Though it has a pretty simple API, it does some really cool things:</p>
+<ul>
+<li>Configurable delayed spinners by distinguishing between “pending” tasks and “spinning” tasks.</li>
+<li>Handles scenarios where multiple instances of a request are fired quickly: only the data from the most recently fired request will be returned.</li>
+<li>It can also handle multiple instances of a request where each request’s state is stored and accessed separately.</li>
+<li>Supports Vue and Vuex without reactivity or strict mode errors, via a plugin.</li>
+<li>Has a plugin API that will make it possible to add integration with React and Redux without too much work (open issue for a React plugin <a href=https://github.com/superMDguy/tuxi/issues/1>here</a>, if you’re interested and want to give a 👍).</li>
+</ul>
+<h3 id=examples>Examples</h3>
+<h4 id=pure-javascript>Pure JavaScript</h4>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>tuxi</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;tuxi&#34;</span>;
+<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>api</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;./api&#34;</span>;
+
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>articlesTask</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>tuxi</span>.<span style=color:#a6e22e>task</span>(<span style=color:#a6e22e>api</span>.<span style=color:#a6e22e>fetchArticles</span>);
+
+<span style=color:#75715e>// ⚡ Fire the api call
+</span><span style=color:#75715e></span><span style=color:#a6e22e>articlesTask</span>.<span style=color:#a6e22e>start</span>();
+
+<span style=color:#75715e>// The task is immediately set to pending
+</span><span style=color:#75715e></span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>articlesTask</span>.<span style=color:#a6e22e>pending</span>); <span style=color:#75715e>// true
+</span><span style=color:#75715e></span>
+<span style=color:#75715e>// 🌀 The spinning property has a configurable delay
+</span><span style=color:#75715e></span><span style=color:#a6e22e>setTimeout</span>(() =&gt; <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>articlesTask</span>.<span style=color:#a6e22e>spinning</span>), <span style=color:#ae81ff>1500</span>); <span style=color:#75715e>// true
+</span><span style=color:#75715e></span>
+<span style=color:#75715e>// After a while...
+</span><span style=color:#75715e></span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>articlesTask</span>.<span style=color:#a6e22e>hasValue</span>); <span style=color:#75715e>// true
+</span><span style=color:#75715e></span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>articlesTask</span>.<span style=color:#a6e22e>value</span>); <span style=color:#75715e>// [&#39;New Planet Discovered!&#39;, &#39;17 Surprising Superfoods!&#39;, ...]
+</span></code></pre></div><h4 id=vue>Vue</h4>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-vue data-lang=vue>&lt;<span style=color:#f92672>template</span>&gt;
+  &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;wrapper&#34;</span>&gt;
+    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;empty-message&#34;</span> <span style=color:#f92672>v-if</span><span style=color:#e6db74>=&#34;articlesTask.empty&#34;</span>&gt;<span style=color:#a6e22e>No</span> <span style=color:#a6e22e>articles</span>&lt;/<span style=color:#f92672>div</span>&gt;
+
+    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;spinner&#34;</span> <span style=color:#f92672>v-if</span><span style=color:#e6db74>=&#34;articlesTask.spinning&#34;</span>&gt;<span style=color:#a6e22e>Loading</span> <span style=color:#a6e22e>articles...</span>&lt;/<span style=color:#f92672>div</span>&gt;
+
+    &lt;<span style=color:#f92672>div</span> <span style=color:#a6e22e>class</span><span style=color:#f92672>=</span><span style=color:#e6db74>&#34;error-message&#34;</span> <span style=color:#f92672>v-if</span><span style=color:#e6db74>=&#34;articlesTask.error&#34;</span>&gt;
+      {{ <span style=color:#a6e22e>articlesTask.error.message</span> }}
+    &lt;/<span style=color:#f92672>div</span>&gt;
+
+    &lt;<span style=color:#f92672>ul</span> <span style=color:#f92672>v-if</span><span style=color:#e6db74>=&#34;articlesTask.hasValue&#34;</span>&gt;
+      &lt;<span style=color:#f92672>li</span> <span style=color:#f92672>v-for</span><span style=color:#e6db74>=&#34;article in articles&#34;</span>&gt;
+        {{ <span style=color:#a6e22e>article.title</span> }}
+      &lt;/<span style=color:#f92672>li</span>&gt;
+    &lt;/<span style=color:#f92672>ul</span>&gt;
+  &lt;/<span style=color:#f92672>div</span>&gt;
+&lt;/<span style=color:#f92672>template</span>&gt;
+
+&lt;<span style=color:#f92672>script</span>&gt;
+<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>tuxi</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;tuxi&#34;</span>;
+<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>api</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;./api&#34;</span>;
+<span style=color:#66d9ef>export</span> <span style=color:#66d9ef>default</span> {
+  <span style=color:#a6e22e>data</span>() {
+    <span style=color:#66d9ef>return</span> {
+      <span style=color:#a6e22e>articlesTask</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>tuxi</span>.<span style=color:#a6e22e>task</span>(<span style=color:#a6e22e>api</span>.<span style=color:#a6e22e>fetchArticles</span>),
+    };
+  },
+  <span style=color:#a6e22e>computed</span><span style=color:#f92672>:</span> {
+    <span style=color:#a6e22e>articles</span>() {
+      <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>articlesTask</span>.<span style=color:#a6e22e>value</span>;
+    },
+  },
+};
+&lt;/<span style=color:#f92672>script</span>&gt;
+</code></pre></div><h4 id=vuex>Vuex</h4>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>tuxi</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;tuxi&#34;</span>;
+<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>Vuex</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;vuex&#34;</span>;
+<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>Vue</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;vue&#34;</span>;
+<span style=color:#66d9ef>import</span> <span style=color:#a6e22e>api</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;./api&#34;</span>;
+
+<span style=color:#a6e22e>Vue</span>.<span style=color:#a6e22e>use</span>(<span style=color:#a6e22e>Vuex</span>);
+
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>store</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Vuex</span>.<span style=color:#a6e22e>Store</span>({
+  <span style=color:#a6e22e>strict</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>true</span>, <span style=color:#75715e>// tuxi works in strict mode!
+</span><span style=color:#75715e></span>
+  <span style=color:#a6e22e>state</span><span style=color:#f92672>:</span> {
+    <span style=color:#a6e22e>articles</span><span style=color:#f92672>:</span> [],
+    <span style=color:#a6e22e>articlesTask</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>tuxi</span>.<span style=color:#a6e22e>task</span>(<span style=color:#a6e22e>api</span>.<span style=color:#a6e22e>fetchArticles</span>),
+  },
+
+  <span style=color:#a6e22e>mutations</span><span style=color:#f92672>:</span> {
+    <span style=color:#a6e22e>SET_ARTICLES</span>(<span style=color:#a6e22e>state</span>, <span style=color:#a6e22e>articles</span>) {
+      <span style=color:#a6e22e>state</span>.<span style=color:#a6e22e>articles</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>articles</span>;
+    },
+  },
+
+  <span style=color:#a6e22e>actions</span><span style=color:#f92672>:</span> {
+    <span style=color:#66d9ef>async</span> <span style=color:#a6e22e>articles</span>({ <span style=color:#a6e22e>commit</span>, <span style=color:#a6e22e>state</span> }) {
+      <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>articles</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>state</span>.<span style=color:#a6e22e>articlesTask</span>.<span style=color:#a6e22e>start</span>();
+      <span style=color:#a6e22e>commit</span>(<span style=color:#e6db74>&#34;SET_ARTICLES&#34;</span>, <span style=color:#a6e22e>articles</span>);
+    },
+  },
+});
+
+<span style=color:#a6e22e>tuxi</span>.<span style=color:#a6e22e>config</span>.<span style=color:#a6e22e>vuexStore</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>store</span>;
+<span style=color:#75715e>// Now you can access $store.state.articlesTask in your components to look at the task&#39;s state
+</span></code></pre></div><h3 id=final-notes>Final Notes</h3>
+<p>Tuxi is still relatively new, but it’s pretty stable. It has <a href="https://codecov.io/github/superMDguy/tuxi?branch=master">full</a> <a href=https://circleci.com/gh/superMDguy/tuxi/tree/master>passing</a> unit test coverage, and I’m using it in production. Though I don’t have full documentation written yet, you can read the <a href=https://github.com/superMDguy/tuxi/tree/master/tests>tests</a> for complete usage examples. Also, feel free to create an issue if you have any questions, requests, or suggestions, and I’ll get back to you as soon as I can.</p>
+<p>UPDATE (10/11/2018): I wrote the <a href=https://github.com/superMDguy/tuxi/blob/HEAD/docs/readme.md>docs</a>.</p>
+</section>
+<nav class=post-nav>
+<a class=next href=https://superMDguy.github.io/post/2017-11-09_how-to-build-your-own-reactivity-system/><span>How to Build Your Own Reactivity System</span><span>→</span></a>
+</nav>
+</article>
+</main>
+<footer class=footer>
+<p>&copy; 2022 <a href=https://superMDguy.github.io/>My Homepage</a></p>
+<p>Powered by <a href=https://gohugo.io/ rel=noopener target=_blank>Hugo️️</a>️</p>
+<p>
+<a href=https://github.com/nanxiaobei/hugo-paper rel=noopener target=_blank>Paper 5.1</a>
+</p>
+</footer>
+</body>
+</html>

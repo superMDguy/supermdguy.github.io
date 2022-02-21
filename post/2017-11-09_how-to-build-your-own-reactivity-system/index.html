@@ -1,0 +1,315 @@
+<!doctype html><html lang=en-us>
+<head>
+<meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<title>How to Build Your Own Reactivity System - My Homepage</title>
+<meta name=description content="Want to learn about Vuex? Check out my hands on course! . Message me to be an early reviewer and get it for free.
+A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its creator, Evan You. Instead of just teaching us how to use Vue, he showed us how to actually implement a few parts of it.">
+<meta name=author content="Matthew Dangerfield">
+<link rel="preload stylesheet" as=style href=https://superMDguy.github.io/app.min.css>
+<link rel="preload stylesheet" as=style href=https://superMDguy.github.io/an-old-hope.min.css>
+<script defer src=https://superMDguy.github.io/highlight.min.js onload=hljs.initHighlightingOnLoad()></script>
+<link rel=preload as=image href=https://superMDguy.github.io/theme.png>
+<link rel=preload as=image href=https://superMDguy.github.io/twitter.svg>
+<link rel=preload as=image href=https://superMDguy.github.io/github.svg>
+<link rel=icon href=https://superMDguy.github.io/favicon.ico>
+<link rel=apple-touch-icon href=https://superMDguy.github.io/apple-touch-icon.png>
+<meta name=generator content="Hugo 0.92.2">
+<meta property="og:title" content="How to Build Your Own Reactivity System">
+<meta property="og:description" content="A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its…">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://superMDguy.github.io/post/2017-11-09_how-to-build-your-own-reactivity-system/"><meta property="og:image" content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg"><meta property="og:image" content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/2.gif"><meta property="og:image" content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/3.png"><meta property="article:section" content="post">
+<meta property="article:published_time" content="2017-11-09T22:14:34+00:00">
+<meta property="article:modified_time" content="2019-08-23T14:14:30-07:00">
+<meta itemprop=name content="How to Build Your Own Reactivity System">
+<meta itemprop=description content="A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its…"><meta itemprop=datePublished content="2017-11-09T22:14:34+00:00">
+<meta itemprop=dateModified content="2019-08-23T14:14:30-07:00">
+<meta itemprop=wordCount content="2295"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/2.gif"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/3.png">
+<meta itemprop=keywords content>
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg">
+<meta name=twitter:title content="How to Build Your Own Reactivity System">
+<meta name=twitter:description content="A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its…">
+</head>
+<body class=not-ready data-menu=true>
+<header class=header>
+<p class=logo>
+<a class=site-name href=https://superMDguy.github.io/>My Homepage</a>
+</p>
+<script>let bodyClx=document.body.classList,btnDark=document.querySelector('.btn-dark'),sysDark=window.matchMedia('(prefers-color-scheme: dark)'),darkVal=localStorage.getItem('dark'),setDark=a=>{bodyClx[a?'add':'remove']('dark'),localStorage.setItem('dark',a?'yes':'no')};setDark(darkVal?darkVal==='yes':sysDark.matches),requestAnimationFrame(()=>bodyClx.remove('not-ready')),btnDark.addEventListener('click',()=>setDark(!bodyClx.contains('dark'))),sysDark.addEventListener('change',a=>setDark(a.matches))</script>
+<nav class=menu>
+<a href=/about/>About</a>
+</nav>
+<nav class=social>
+<a class=twitter style=--url:url(./twitter.svg) href=https://twitter.com/superMDguy target=_blank></a>
+<a class=github style=--url:url(./github.svg) href=https://github.com/superMDguy target=_blank></a>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-title>
+<p>
+<time>Nov 9, 2017</time>
+<span>Matthew Dangerfield</span>
+</p>
+<h1>How to Build Your Own Reactivity System</h1>
+</header>
+<section class=post-content><p><img src=/post/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg alt=image></p>
+<p><em>Want to learn about Vuex? Check out my</em> <a href=https://bit.ly/31v8NPq><em>hands on course</em></a><em>! . Message me to be an early reviewer and get it for free.</em></p>
+<p>A couple of months ago, I attended an in-person meetup at <a href=https://medium.com/u/1b199ed2dfd>Frontend Masters</a> called <em>Vue.js Advanced Features from the Ground Up</em>. It was really awesome because we got to learn about <a href=https://medium.com/u/9b930cf6db26>Vue.js</a> from its creator, Evan You. Instead of just teaching us how to use Vue, he showed us how to actually implement a few parts of it. Reactivity was the part that interested me the most, so, after the class, I dug into <a href=https://github.com/vuejs/vue>Vue’s source code</a> to learn more about exactly how its reactivity system works. In this guide, I’ll explain how Vue’s reactivity system is implemented, and show how you to make your own working reactivity system.</p>
+<h3 id=the-problem-of-reactivity>The Problem of Reactivity</h3>
+<p>What is reactivity? I really like how Evan explained it in his talk, so I’ll use his examples. Say you have a variable <code>a</code>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>let</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;
+</code></pre></div><p>Now, let’s say you have another variable <code>b</code>, such that <code>b = a * 3</code> .</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>let</span> <span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>3</span>;
+<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>b</span>); <span style=color:#75715e>// 9
+</span></code></pre></div><p>That’s working just fine. But what happens if you need to change <code>a</code>?</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
+<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>b</span>); <span style=color:#75715e>// 9
+</span></code></pre></div><p>Even though <code>a</code> changed, <code>b</code> stayed the same. Why? Because you never changed <code>b</code>. If you want to make sure <code>b</code> is still <code>a * 3</code>, you’d have to do it like this:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
+<span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>3</span>;
+<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>b</span>); <span style=color:#75715e>// 15
+</span></code></pre></div><p>Now, this is working, but it would be annoying to have to type out <code>b = a * 3</code>every time <code>a</code> changes. We could solve this problem by wrapping the update to <code>b</code> in a function</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>let</span> <span style=color:#a6e22e>b</span>;
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>onUpdate</span>() {
+  <span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>3</span>;
+}
+
+<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;
+<span style=color:#a6e22e>onUpdate</span>();
+<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>b</span>); <span style=color:#75715e>// 9
+</span><span style=color:#75715e></span>
+<span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>;
+<span style=color:#a6e22e>onUpdate</span>();
+<span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>b</span>); <span style=color:#75715e>// 15
+</span></code></pre></div><p>But, this still isn’t a very nice way of doing things. While it’s not too problematic in this example, imagine if we had 10 different variables, that all had a potentially complex relation to another variable or variables. We’d need a separate <code>onUpdate()</code> method for each variable. Instead of this awkward and imperative API, it’d be nice to have a simpler, more declarative API that just does what we want it to do. Evan compared it to a spreadsheet, where we can update one cell and know that any cell that depends on the one we updated will automatically update itself.</p>
+<p><img src=/post/2017-11-09_how-to-build-your-own-reactivity-system/images/2.gif alt="screen capture of a spreadsheet reactively updating"></p>
+<h3 id=solutions>Solutions</h3>
+<p>The good thing is that people have already come up with a number of solutions to this reactivity problem. In fact, each of the three major web development frameworks provides a solution to reactivity:</p>
+<ol>
+<li><strong>React’s State Management</strong>: Create a function <code>setState()</code>, and use that whenever we need to update <code>a</code>. Then, inside <code>setState()</code>, call a render function that updates the view to display the proper value of <code>b</code>.</li>
+<li><strong>Angular’s Dirty Checking</strong>: Create a function <code>detectChanges()</code>, that runs through every property it’s tracking and checks if it’s changed since the last time it was checked. If it finds an updated property (e.g. <code>a</code>), then it updates every property that uses the updated property (e.g. <code>b</code>). Then, run the <code>detectChanges()</code> function every few milliseconds and whenever it’s logical.</li>
+<li><strong>Vue’s reactivity system</strong>: Add ES5 getters and setters to each tracked property. Whenever a tracked property is accessed, mark the function that accessed the property as a “subscriber”. Whenever the property is changed, notify each subscriber of the change.</li>
+</ol>
+<p>We’re going to implement Vue’s reactivity system in pure JavaScript. Before we get into the code, let’s go into some more details about exactly what we’re building.</p>
+<h3 id=what-were-building>What We’re Building</h3>
+<p><img src=/post/2017-11-09_how-to-build-your-own-reactivity-system/images/3.png alt></p>
+<p><em>Diagram of how Vue’s reactivity system works. Source: <a href=https://vuejs.org/v2/guide/reactivity.htm>https://vuejs.org/v2/guide/reactivity.htm</a></em></p>
+<p>We’re going to create a class, called <strong><em>Watcher</em></strong>, that takes in two properties: a <strong>value getter</strong> and a <strong>callback</strong>. The value getter can be any function that has a return value. Example:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>let</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>;
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>getter</span> <span style=color:#f92672>=</span> () =&gt; <span style=color:#a6e22e>a</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>3</span>;
+</code></pre></div><p>The getter will probably have <strong>dependencies</strong>, or variables it depends on to get its value. In the example above, <code>a</code> is the only dependency of the getter function. Getter functions can have multiple dependencies, though. For example, <code>() => x * y</code> has both <code>x</code> and <code>y</code> as dependencies.</p>
+<p>Whenever a dependency of the getter function changes, we’ll automatically run the callback function, passing in the current value and the previous value. This callback can do anything, from just logging the value to displaying the value in a div.</p>
+<p>Finally, we’ll create a <code>defineReactive()</code> function, that adds change detection to a property on an object. We’ll also create a <code>walk()</code> function that adds change detection to all properties on an object. This will allow properties of the object to be used as dependencies. We will implement this change detection the same way Vue does: by defining ES5 <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get>getters and setters</a>. While this approach does have some limitations (described in the <a href=https://vuejs.org/v2/guide/reactivity.html>docs</a>), it’s an extremely efficient and simple way of getting reactivity, since the JavaScript engine is ultimately providing the change detection.</p>
+<blockquote>
+<p><strong>Footnote:</strong> The unreleased <a href=https://blog.cloudboost.io/reactivity-in-vue-js-2-vs-vue-js-3-dcdd0728dcdf>Vue 3 will use ES6 Proxies</a> instead of getters and setters, but I believe the rest of Vue’s reactivity system won’t change that much.</p>
+</blockquote>
+<p>When we’re finished, we’ll have a general-purpose reactivity API. Here’s an example of its usage:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>data</span> <span style=color:#f92672>=</span> {
+  <span style=color:#a6e22e>name</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;World&#34;</span>,
+  <span style=color:#a6e22e>feeling</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;like&#34;</span>,
+};
+
+<span style=color:#a6e22e>walk</span>(<span style=color:#a6e22e>data</span>); <span style=color:#75715e>// adds reactivity to the data object
+</span><span style=color:#75715e></span><span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Watcher</span>(
+  () =&gt; <span style=color:#e6db74>`Hello, </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>data</span>.<span style=color:#a6e22e>name</span><span style=color:#e6db74>}</span><span style=color:#e6db74>. I </span><span style=color:#e6db74>${</span><span style=color:#a6e22e>data</span>.<span style=color:#a6e22e>feeling</span><span style=color:#e6db74>}</span><span style=color:#e6db74> Vue.js.`</span>, <span style=color:#75715e>// the value getter we&#39;re watching
+</span><span style=color:#75715e></span>  (<span style=color:#a6e22e>val</span>, <span style=color:#a6e22e>oldVal</span>) =&gt; <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>val</span>) <span style=color:#75715e>// the callback, fired on changes to dependencies of the value getter
+</span><span style=color:#75715e></span>); <span style=color:#75715e>// logs &#39;Hello, World. I like Vue.js&#39;
+</span><span style=color:#75715e></span>
+<span style=color:#a6e22e>data</span>.<span style=color:#a6e22e>name</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Universe&#34;</span>; <span style=color:#75715e>// logs &#39;Hello, Universe. I like Vue.js&#39;
+</span><span style=color:#75715e></span><span style=color:#a6e22e>data</span>.<span style=color:#a6e22e>feeling</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;love&#34;</span>; <span style=color:#75715e>// logs &#39;Hello, Universe. I love Vue.js&#39;
+</span></code></pre></div><h3 id=deps>Deps</h3>
+<p>The first step is to implement the <strong><em>Dep</em></strong> class. <strong><em>Dep</em></strong>, short for dependency, is a wrapper around a value. Our implementation will be directly based on <a href=https://github.com/vuejs/vue/blob/dev/src/core/observer/dep.js>Vue’s <strong><em>Dep</em></strong> class</a>. Each <strong><em>Dep</em></strong> instance maintains a list of subscribers, or <code>subs</code>, that all want to know whenever the dep’s value changes. These subscribers are instances of the <strong><em>Watcher</em></strong> class, which we will implement in the next section. Each <strong><em>Dep</em></strong> instance is responsible for calling each subscriber’s <code>update()</code> method whenever the dep’s value changes.</p>
+<p>Even though <strong><em>Dep</em></strong> instances are responsible for alerting subscribers of changes to a value, each <strong><em>Dep</em></strong> instance doesn’t actually know what value it’s watching. So, it each <strong><em>Dep</em></strong> instance has a <code>notify()</code> method, which lets it know when its value changes. We’ll talk more about who calls <code>notify()</code> later, but for now just assume it gets called whenever the watched value changes. Here’s a working <strong><em>Dep</em></strong> implementation:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#75715e>// See https://github.com/vuejs/vue/blob/be9ac624c81bb698ed75628fe0cbeaba4a2fc991/src/core/observer/dep.js
+</span><span style=color:#75715e>// for full implementation
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Dep</span> {
+  <span style=color:#a6e22e>constructor</span>() {
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>subs</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Set</span>();
+  }
+
+  <span style=color:#a6e22e>addSub</span>(<span style=color:#a6e22e>sub</span>) {
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>subs</span>.<span style=color:#a6e22e>add</span>(<span style=color:#a6e22e>sub</span>);
+  }
+
+  <span style=color:#a6e22e>depend</span>() {
+    <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>Dep</span>.<span style=color:#a6e22e>target</span>) {
+      <span style=color:#a6e22e>Dep</span>.<span style=color:#a6e22e>target</span>.<span style=color:#a6e22e>addDep</span>(<span style=color:#66d9ef>this</span>);
+    }
+  }
+
+  <span style=color:#a6e22e>notify</span>() {
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>subs</span>.<span style=color:#a6e22e>forEach</span>((<span style=color:#a6e22e>sub</span>) =&gt; <span style=color:#a6e22e>sub</span>.<span style=color:#a6e22e>update</span>());
+  }
+}
+</code></pre></div><p>What is <code>Dep.target</code>, and when does it get a value? <code>Dep.target</code> is a <strong><em>Watcher</em></strong> instance that lets the <strong><em>Dep</em></strong> instance know who’s using its value. This is necessary because the <strong><em>Dep</em></strong> instance needs to register itself as a dependency of the target watcher. There are two functions, <code>pushTarget()</code> and <code>popTarget()</code>, that manage the current <strong>Dep.target</strong>. Here’s what these look like:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#75715e>// the current target watcher being evaluated.
+</span><span style=color:#75715e>// this is globally unique because there could be only one
+</span><span style=color:#75715e>// watcher being evaluated at any time.
+</span><span style=color:#75715e></span><span style=color:#a6e22e>Dep</span>.<span style=color:#a6e22e>target</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>null</span>;
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>targetStack</span> <span style=color:#f92672>=</span> [];
+
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>pushTarget</span>(<span style=color:#a6e22e>_target</span>) {
+  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>Dep</span>.<span style=color:#a6e22e>target</span>) <span style=color:#a6e22e>targetStack</span>.<span style=color:#a6e22e>push</span>(<span style=color:#a6e22e>Dep</span>.<span style=color:#a6e22e>target</span>);
+  <span style=color:#a6e22e>Dep</span>.<span style=color:#a6e22e>target</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>_target</span>;
+}
+
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>popTarget</span>() {
+  <span style=color:#a6e22e>Dep</span>.<span style=color:#a6e22e>target</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>targetStack</span>.<span style=color:#a6e22e>pop</span>();
+}
+</code></pre></div><p>We’ll discuss these methods more in the next section.</p>
+<h3 id=watchers>Watchers</h3>
+<p>According to the <a href=https://github.com/vuejs/vue/blob/be9ac624c81bb698ed75628fe0cbeaba4a2fc991/src/core/observer/watcher.js>source code</a>:</p>
+<blockquote>
+<p>A watcher parses an expression, collects dependencies, and fires callbacks when the expression value changes. This is used for both the $watch() api and directives.</p>
+</blockquote>
+<p>The <strong><em>Watcher</em></strong> class takes in a <strong>getter</strong> <strong>function</strong> and a <strong>callback function</strong>, and stores an array of dependencies of the value computed by the getter function. It tracks the values of the dependencies, and runs the callback function whenever any of these dependencies change. Here’s an example:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>let</span> <span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>,
+  <span style=color:#a6e22e>b</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>4</span>;
+
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>getter</span> <span style=color:#f92672>=</span> () =&gt; <span style=color:#a6e22e>a</span> <span style=color:#f92672>+</span> <span style=color:#a6e22e>b</span>;
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>callback</span> <span style=color:#f92672>=</span> (<span style=color:#a6e22e>val</span>) =&gt; <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#a6e22e>val</span>);
+
+<span style=color:#66d9ef>const</span> <span style=color:#a6e22e>watcher</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Watcher</span>(<span style=color:#a6e22e>getter</span>, <span style=color:#a6e22e>callback</span>);
+
+<span style=color:#a6e22e>a</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>6</span>; <span style=color:#75715e>// 10 is logged to the console`
+</span></code></pre></div><p>In Vue’s code, the <strong><em>Watcher</em></strong> class has several methods, but, for our purposes, we just need to implement three of them:</p>
+<ol>
+<li><code>get()</code>. This method calls the getter function supplied in the constructor to figure out what the initial value is. Before it calls the getter, it sets itself as the current <strong><em>Dep</em></strong> target watcher, using the <code>pushTarget()</code> **** method. This makes it so all values used in the getter function will add the <strong><em>Watcher</em></strong> instance as a subscriber. This is important because the **<em>Watcher</em>** instance needs to be linked to its dependencies in some way so it can be notified whenever the value of one of its dependencies changes.</li>
+<li><code>addDep(dep)</code>. This method adds itself as a subscriber to the given dependency. This method is called by the <em>Dep#depend()</em> method, which we’ll discuss in more detail in the next section.</li>
+<li><code>update()</code>. This method calls the callback function supplied in the constructor with the old value and new value as arguments. It gets used when the <em>Dep#notify()</em> method calls <code>update</code> on each of its subscribers after its value changes.</li>
+</ol>
+<p>Here’s the code for our <strong><em>Watcher</em></strong> class:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#75715e>// See https://github.com/vuejs/vue/blob/be9ac624c81bb698ed75628fe0cbeaba4a2fc991/src/core/observer/watcher.js
+</span><span style=color:#75715e>// for full implementation
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Watcher</span> {
+  <span style=color:#a6e22e>constructor</span>(<span style=color:#a6e22e>getter</span>, <span style=color:#a6e22e>cb</span>) {
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>getter</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>getter</span>; <span style=color:#75715e>// function that returns a value based on reactive properties
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>cb</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>cb</span>; <span style=color:#75715e>// function that is run on value updates, and is passed value and old value
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>get</span>();
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>cb</span>(<span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>value</span>, <span style=color:#66d9ef>null</span>);
+  }
+
+  <span style=color:#a6e22e>get</span>() {
+    <span style=color:#a6e22e>pushTarget</span>(<span style=color:#66d9ef>this</span>); <span style=color:#75715e>// from dep.js
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>getter</span>();
+    <span style=color:#a6e22e>popTarget</span>(); <span style=color:#75715e>// from dep.js
+</span><span style=color:#75715e></span>
+    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>value</span>;
+  }
+
+  <span style=color:#a6e22e>addDep</span>(<span style=color:#a6e22e>dep</span>) {
+    <span style=color:#a6e22e>dep</span>.<span style=color:#a6e22e>addSub</span>(<span style=color:#66d9ef>this</span>);
+  }
+
+  <span style=color:#a6e22e>update</span>() {
+    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>get</span>();
+    <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>oldValue</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>value</span>;
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>value</span>;
+
+    <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>cb</span>(<span style=color:#a6e22e>value</span>, <span style=color:#a6e22e>oldValue</span>);
+  }
+}
+</code></pre></div><h3 id=definereactive><code>defineReactive()</code></h3>
+<p>According to the <a href=https://github.com/vuejs/vue/blob/61187596b9af48f1cb7b1848ad3eccc02ac2509d/src/core/observer/index.js>source code</a>, <code>defineReactive()</code> &ldquo;defines a reactive property on an Object&rdquo;. This is done by adding getters and setters to a given property of a given object. Each property has a <strong><em>Dep</em></strong> instance associated with it. Whenever a reactive object’s property is accessed, the getter calls <em>Dep#depend(),</em> which adds the current target <strong><em>Watcher</em></strong> as a subscriber to the property’s <strong><em>Dep</em></strong> instance. Whenever the property is changed, the setter calls <em>Dep#notify()</em> which calls the <em>update()</em> method of each of the subscribers to the property’s <strong><em>Dep</em></strong><em>.</em> Here’s <em>defineReactive()</em>, based on the source code:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#75715e>// See https://github.com/vuejs/vue/blob/61187596b9af48f1cb7b1848ad3eccc02ac2509d/src/core/observer/index.js
+</span><span style=color:#75715e>// for full implementation
+</span><span style=color:#75715e></span>
+<span style=color:#75715e>/* Walk through each property and convert them into
+</span><span style=color:#75715e> * getter/setters. This method should only be called when
+</span><span style=color:#75715e> * value type is Object.
+</span><span style=color:#75715e> */</span>
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>walk</span>(<span style=color:#a6e22e>obj</span>) {
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>keys</span> <span style=color:#f92672>=</span> Object.<span style=color:#a6e22e>keys</span>(<span style=color:#a6e22e>obj</span>);
+  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>keys</span>.<span style=color:#a6e22e>length</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
+    <span style=color:#a6e22e>defineReactive</span>(<span style=color:#a6e22e>obj</span>, <span style=color:#a6e22e>keys</span>[<span style=color:#a6e22e>i</span>], <span style=color:#a6e22e>obj</span>[<span style=color:#a6e22e>keys</span>[<span style=color:#a6e22e>i</span>]]);
+  }
+}
+
+<span style=color:#66d9ef>function</span> <span style=color:#a6e22e>defineReactive</span>(<span style=color:#a6e22e>obj</span>, <span style=color:#a6e22e>key</span>, <span style=color:#a6e22e>val</span>) {
+  <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>val</span> <span style=color:#f92672>!==</span> <span style=color:#66d9ef>null</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#66d9ef>typeof</span> <span style=color:#a6e22e>val</span> <span style=color:#f92672>===</span> <span style=color:#e6db74>&#34;object&#34;</span>) {
+    <span style=color:#a6e22e>walk</span>(<span style=color:#a6e22e>val</span>); <span style=color:#75715e>// Add reactivity to all children of val
+</span><span style=color:#75715e></span>  }
+
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>dep</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Dep</span>();
+  Object.<span style=color:#a6e22e>defineProperty</span>(<span style=color:#a6e22e>obj</span>, <span style=color:#a6e22e>key</span>, {
+    <span style=color:#a6e22e>enumerable</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>true</span>,
+    <span style=color:#a6e22e>configurable</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>true</span>,
+    <span style=color:#a6e22e>get</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>reactiveGetter</span>() {
+      <span style=color:#a6e22e>dep</span>.<span style=color:#a6e22e>depend</span>();
+
+      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>val</span>;
+    },
+    <span style=color:#a6e22e>set</span><span style=color:#f92672>:</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>reactiveSetter</span>(<span style=color:#a6e22e>newVal</span>) {
+      <span style=color:#a6e22e>val</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>newVal</span>;
+      <span style=color:#a6e22e>dep</span>.<span style=color:#a6e22e>notify</span>();
+    },
+  });
+}
+</code></pre></div><h3 id=how-it-all-works-together>How it all works together</h3>
+<p>Now we’ve written each part of our reactivity system, but how does it all work? Each part of the system is so interconnected with all the other parts that it can be difficult to understand. Let’s walk step by step through what happens in an example usage of our <strong><em>Watcher</em></strong> class.</p>
+<p>We’ll start by setting everything up:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>foods</span> <span style=color:#f92672>=</span> { <span style=color:#a6e22e>apple</span><span style=color:#f92672>:</span> <span style=color:#ae81ff>5</span> };
+
+<span style=color:#75715e>// make foods reactive, register deps for each property
+</span><span style=color:#75715e></span><span style=color:#a6e22e>walk</span>(<span style=color:#a6e22e>foods</span>);
+
+<span style=color:#75715e>// Instantiate the watcher, which takes a getter and a callback
+</span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>foodsWatcher</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>new</span> <span style=color:#a6e22e>Watcher</span>(
+  () =&gt; <span style=color:#a6e22e>foods</span>.<span style=color:#a6e22e>apple</span>,
+  () =&gt; <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;change&#34;</span>)
+);
+</code></pre></div><p>First, the constructor for the <strong><em>Watcher</em></strong> class runs the following:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>get</span>();
+</code></pre></div><p>Here’s <em>Watcher#get()</em>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#a6e22e>pushTarget</span>(<span style=color:#66d9ef>this</span>); <span style=color:#75715e>// Imported from dep.js
+</span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>getter</span>();
+<span style=color:#a6e22e>popTarget</span>(); <span style=color:#75715e>// Imported from dep.js
+</span><span style=color:#75715e></span>
+<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>value</span>;
+</code></pre></div><p>First, it calls the <code>pushTarget()</code> function, which assigns <code>this</code> (the <code>foodsWatcher</code>) to <code>Dep.target</code>. Then, it calls <code>this.getter()</code>, the first function passed to the <strong><em>Watcher</em></strong> constructor. The getter for the <code>foodsWatcher</code> just returns the value of <code>foods.apple</code>. Since <code>foods.apple</code> was made reactive by <code>defineReactive()</code>, it will also run the reactive getter:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#75715e>// adds Dep.target as a subscriber to the property&#39;s dep instance
+</span><span style=color:#75715e></span><span style=color:#a6e22e>dep</span>.<span style=color:#a6e22e>depend</span>();
+<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>value</span>;
+</code></pre></div><p>This registers <code>foodsWatcher</code> as a subscriber to the <strong><em>Dep</em></strong> instance associated with <code>foods.apple</code> . So there’s now a connection between the <code>foodsWatcher</code> and <code>foods.apple</code>.</p>
+<p>How is this helpful? Let’s say we change <code>foods.apple</code>.</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#a6e22e>foods</span>.<span style=color:#a6e22e>apple</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>6</span>;
+</code></pre></div><p>Doing this will call the setter on <code>foods.apple</code>. The setter runs <code>dep.notify()</code>, which calls <code>update()</code>on each of the dep’s subscribers. Since the <code>foodsWatcher</code> is a subscriber to the <strong><em>Dep</em></strong> instance, the <code>dep.notify()</code> call will trigger the update method on <code>foodsWatcher</code>. What does <em>Watcher#update()</em> do?</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=color:#a6e22e>update</span>() {
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>get</span>()
+  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>oldValue</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>value</span>
+  <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>value</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>value</span>
+
+  <span style=color:#66d9ef>this</span>.<span style=color:#a6e22e>cb</span>(<span style=color:#a6e22e>value</span>, <span style=color:#a6e22e>oldValue</span>)
+}
+</code></pre></div><p>It updates its knowledge of the current value, and then calls the callback supplied in the constructor. Remember that the callback we specified was</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js>() =&gt; <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;change&#34;</span>);
+</code></pre></div><p>So, when we change <code>foods.apple</code>, our reactivity system will let us know! The cool thing is that this happened without any dirty checking every millisecond. It happened without us having to explicitly set the state. It just <em>worked</em>, without us having to think about it at all, just like a spreadsheet. That’s what makes Vue’s reactivity system so incredible.</p>
+<p>If you want to see all the code for our reactivity system in one place, I made a <a href=http://embed.plnkr.co/rMLS2Swq4mz0aXcxqDYA/>plunker</a> with a really cool demo. Thanks for reading!</p>
+<h3 id=resources>Resources</h3>
+<ul>
+<li>The <a href=https://frontendmasters.com/live-event/vue-js-advanced-features-ground/>Frontend Masters course</a> I went to (if you have a Frontend Masters subscription)</li>
+<li>Vue’s <a href=https://vuejs.org/v2/guide/reactivity.html>docs on reactivity</a></li>
+<li>A <a href=https://www.dotconferences.com/2016/12/evan-you-reactivity-in-frontend-javascript-frameworks>talk Evan gave</a> in 2016 on reactivity</li>
+<li>Vue’s <a href=https://github.com/vuejs/vue/tree/dev/src/core/observer>source code</a> (the ultimate reference)</li>
+</ul>
+</section>
+<nav class=post-nav>
+<a class=prev href=https://superMDguy.github.io/post/2018-10-10_solution-to-async-boilerplate-in-javascript-/><span>←</span><span>A solution to async boilerplate in JavaScript ✨</span></a>
+<a class=next href=https://superMDguy.github.io/post/2017-08-10_how-to-control-bootstraps-css/><span>How to control bootstrap’s css</span><span>→</span></a>
+</nav>
+</article>
+</main>
+<footer class=footer>
+<p>&copy; 2022 <a href=https://superMDguy.github.io/>My Homepage</a></p>
+<p>Powered by <a href=https://gohugo.io/ rel=noopener target=_blank>Hugo️️</a>️</p>
+<p>
+<a href=https://github.com/nanxiaobei/hugo-paper rel=noopener target=_blank>Paper 5.1</a>
+</p>
+</footer>
+</body>
+</html>
