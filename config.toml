@@ -2,6 +2,7 @@ baseURL = 'https://superMDguy.github.io/'
 languageCode = 'en-us'
 title = 'My Homepage'
 author = 'Matthew Dangerfield'
+copyright = 'Copyright © 2022 Matthew Dangerfield'
 theme = 'paper'
 
 [params]
