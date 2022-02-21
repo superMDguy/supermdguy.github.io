@@ -20,8 +20,6 @@ aliases:
 
 ![image](/post/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg)
 
-_Want to learn about Vuex? Check out my_ [_hands on course_](https://bit.ly/31v8NPq)_! . Message me to be an early reviewer and get it for free._
-
 A couple of months ago, I attended an in-person meetup at [Frontend Masters](https://medium.com/u/1b199ed2dfd) called _Vue.js Advanced Features from the Ground Up_. It was really awesome because we got to learn about [Vue.js](https://medium.com/u/9b930cf6db26) from its creator, Evan You. Instead of just teaching us how to use Vue, he showed us how to actually implement a few parts of it. Reactivity was the part that interested me the most, so, after the class, I dug into [Vue’s source code](https://github.com/vuejs/vue) to learn more about exactly how its reactivity system works. In this guide, I’ll explain how Vue’s reactivity system is implemented, and show how you to make your own working reactivity system.
 
 ### The Problem of Reactivity
