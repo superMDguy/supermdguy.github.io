@@ -18,7 +18,7 @@ aliases:
   - "/how-to-build-your-own-reactivity-system-fc48863a1b7c"
 ---
 
-![image](/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg)
+![image](/post/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg)
 
 _Want to learn about Vuex? Check out my_ [_hands on course_](https://bit.ly/31v8NPq)_! . Message me to be an early reviewer and get it for free._
 
@@ -73,7 +73,7 @@ console.log(b); // 15
 
 But, this still isn’t a very nice way of doing things. While it’s not too problematic in this example, imagine if we had 10 different variables, that all had a potentially complex relation to another variable or variables. We’d need a separate `onUpdate()` method for each variable. Instead of this awkward and imperative API, it’d be nice to have a simpler, more declarative API that just does what we want it to do. Evan compared it to a spreadsheet, where we can update one cell and know that any cell that depends on the one we updated will automatically update itself.
 
-![screen capture of a spreadsheet reactively updating](/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/2.gif)
+![screen capture of a spreadsheet reactively updating](/post/2017-11-09_how-to-build-your-own-reactivity-system/images/2.gif)
 
 ### Solutions
 
@@ -87,7 +87,7 @@ We’re going to implement Vue’s reactivity system in pure JavaScript. Before 
 
 ### What We’re Building
 
-![](/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/3.png)
+![](/post/2017-11-09_how-to-build-your-own-reactivity-system/images/3.png)
 
 _Diagram of how Vue’s reactivity system works. Source: https://vuejs.org/v2/guide/reactivity.htm_
 
@@ -111,7 +111,7 @@ When we’re finished, we’ll have a general-purpose reactivity API. Here’s a
 ```js
 const data = {
   name: "World",
-  feeling: "like"
+  feeling: "like",
 };
 
 walk(data); // adds reactivity to the data object
@@ -150,7 +150,7 @@ class Dep {
   }
 
   notify() {
-    this.subs.forEach(sub => sub.update());
+    this.subs.forEach((sub) => sub.update());
   }
 }
 ```
@@ -189,7 +189,7 @@ let a = 5,
   b = 4;
 
 const getter = () => a + b;
-const callback = val => console.log(val);
+const callback = (val) => console.log(val);
 
 const watcher = new Watcher(getter, callback);
 
@@ -274,7 +274,7 @@ function defineReactive(obj, key, val) {
     set: function reactiveSetter(newVal) {
       val = newVal;
       dep.notify();
-    }
+    },
   });
 }
 ```
@@ -318,8 +318,8 @@ First, it calls the `pushTarget()` function, which assigns `this` (the `foodsWat
 
 ```js
 // adds Dep.target as a subscriber to the property's dep instance
-dep.depend()
-return value
+dep.depend();
+return value;
 ```
 
 This registers `foodsWatcher` as a subscriber to the **_Dep_** instance associated with `foods.apple` . So there’s now a connection between the `foodsWatcher` and `foods.apple`.
@@ -327,7 +327,7 @@ This registers `foodsWatcher` as a subscriber to the **_Dep_** instance associat
 How is this helpful? Let’s say we change `foods.apple`.
 
 ```js
-foods.apple = 6
+foods.apple = 6;
 ```
 
 Doing this will call the setter on `foods.apple`. The setter runs `dep.notify()`, which calls `update()`on each of the dep’s subscribers. Since the `foodsWatcher` is a subscriber to the **_Dep_** instance, the `dep.notify()` call will trigger the update method on `foodsWatcher`. What does _Watcher#update()_ do?
@@ -345,7 +345,7 @@ update() {
 It updates its knowledge of the current value, and then calls the callback supplied in the constructor. Remember that the callback we specified was
 
 ```js
-() => console.log('change')
+() => console.log("change");
 ```
 
 So, when we change `foods.apple`, our reactivity system will let us know! The cool thing is that this happened without any dirty checking every millisecond. It happened without us having to explicitly set the state. It just _worked_, without us having to think about it at all, just like a spreadsheet. That’s what makes Vue’s reactivity system so incredible.

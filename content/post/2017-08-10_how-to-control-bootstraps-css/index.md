@@ -16,7 +16,7 @@ aliases:
   - "/how-to-control-bootstraps-css-394f9928a499"
 ---
 
-![image](/posts/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg)
+![image](/post/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg)
 
 Source: [https://teckstack.com](https://teckstack.com)
 

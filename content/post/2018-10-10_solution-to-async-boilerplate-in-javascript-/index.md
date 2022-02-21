@@ -16,7 +16,7 @@ aliases:
   - "/a-solution-to-async-boilerplate-in-javascript-2fa717801c3b"
 ---
 
-![image](/posts/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg)
+![image](/post/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg)
 
 [Source](https://en.wikipedia.org/wiki/Tuxedo#/media/File:Dinner_Jackets,_1898..jpg)
 
@@ -26,8 +26,8 @@ Have you ever written code that looks like this?
 function loadStuff() {
   state.loading = true;
   fetch("//myapi.com/stuff")
-    .then(res => res.json())
-    .then(data => {
+    .then((res) => res.json())
+    .then((data) => {
       state.loading = false;
       state.stuff = data;
     });
@@ -79,13 +79,9 @@ console.log(articlesTask.value); // ['New Planet Discovered!', '17 Surprising Su
 ```vue
 <template>
   <div class="wrapper">
-    <div class="empty-message" v-if="articlesTask.empty">
-      No articles
-    </div>
+    <div class="empty-message" v-if="articlesTask.empty">No articles</div>
 
-    <div class="spinner" v-if="articlesTask.spinning">
-      Loading articles...
-    </div>
+    <div class="spinner" v-if="articlesTask.spinning">Loading articles...</div>
 
     <div class="error-message" v-if="articlesTask.error">
       {{ articlesTask.error.message }}
@@ -105,14 +101,14 @@ import api from "./api";
 export default {
   data() {
     return {
-      articlesTask: tuxi.task(api.fetchArticles)
+      articlesTask: tuxi.task(api.fetchArticles),
     };
   },
   computed: {
     articles() {
       return this.articlesTask.value;
-    }
-  }
+    },
+  },
 };
 </script>
 ```
@@ -132,21 +128,21 @@ const store = new Vuex.Store({
 
   state: {
     articles: [],
-    articlesTask: tuxi.task(api.fetchArticles)
+    articlesTask: tuxi.task(api.fetchArticles),
   },
 
   mutations: {
     SET_ARTICLES(state, articles) {
       state.articles = articles;
-    }
+    },
   },
 
   actions: {
     async articles({ commit, state }) {
       const articles = await state.articlesTask.start();
       commit("SET_ARTICLES", articles);
-    }
-  }
+    },
+  },
 });
 
 tuxi.config.vuexStore = store;
