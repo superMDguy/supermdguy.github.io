@@ -4,8 +4,7 @@
 <meta http-equiv=x-ua-compatible content="IE=edge">
 <meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
 <title>How to Build Your Own Reactivity System - My Homepage</title>
-<meta name=description content="Want to learn about Vuex? Check out my hands on course! . Message me to be an early reviewer and get it for free.
-A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its creator, Evan You. Instead of just teaching us how to use Vue, he showed us how to actually implement a few parts of it.">
+<meta name=description content="A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its creator, Evan You. Instead of just teaching us how to use Vue, he showed us how to actually implement a few parts of it. Reactivity was the part that interested me the most, so, after the class, I dug into Vue’s source code to learn more about exactly how its reactivity system works.">
 <meta name=author content="Matthew Dangerfield">
 <link rel="preload stylesheet" as=style href=https://superMDguy.github.io/app.min.css>
 <link rel="preload stylesheet" as=style href=https://superMDguy.github.io/an-old-hope.min.css>
@@ -25,7 +24,7 @@ A couple of months ago, I attended an in-person meetup at Frontend Masters calle
 <meta itemprop=name content="How to Build Your Own Reactivity System">
 <meta itemprop=description content="A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its…"><meta itemprop=datePublished content="2017-11-09T22:14:34+00:00">
 <meta itemprop=dateModified content="2019-08-23T14:14:30-07:00">
-<meta itemprop=wordCount content="2295"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/2.gif"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/3.png">
+<meta itemprop=wordCount content="2271"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/2.gif"><meta itemprop=image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/3.png">
 <meta itemprop=keywords content>
 <meta name=twitter:card content="summary_large_image">
 <meta name=twitter:image content="https://superMDguy.github.io/posts/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg">
@@ -56,7 +55,6 @@ A couple of months ago, I attended an in-person meetup at Frontend Masters calle
 <h1>How to Build Your Own Reactivity System</h1>
 </header>
 <section class=post-content><p><img src=/post/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg alt=image></p>
-<p><em>Want to learn about Vuex? Check out my</em> <a href=https://bit.ly/31v8NPq><em>hands on course</em></a><em>! . Message me to be an early reviewer and get it for free.</em></p>
 <p>A couple of months ago, I attended an in-person meetup at <a href=https://medium.com/u/1b199ed2dfd>Frontend Masters</a> called <em>Vue.js Advanced Features from the Ground Up</em>. It was really awesome because we got to learn about <a href=https://medium.com/u/9b930cf6db26>Vue.js</a> from its creator, Evan You. Instead of just teaching us how to use Vue, he showed us how to actually implement a few parts of it. Reactivity was the part that interested me the most, so, after the class, I dug into <a href=https://github.com/vuejs/vue>Vue’s source code</a> to learn more about exactly how its reactivity system works. In this guide, I’ll explain how Vue’s reactivity system is implemented, and show how you to make your own working reactivity system.</p>
 <h3 id=the-problem-of-reactivity>The Problem of Reactivity</h3>
 <p>What is reactivity? I really like how Evan explained it in his talk, so I’ll use his examples. Say you have a variable <code>a</code>.</p>
