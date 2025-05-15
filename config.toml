@@ -1,18 +1,27 @@
 baseURL = 'https://superMDguy.github.io/'
 languageCode = 'en-us'
-title = 'My Homepage'
+title = "Matthew's Homepage"
 author = 'Matthew Dangerfield'
-copyright = 'Copyright © 2022 Matthew Dangerfield'
+copyright = 'Copyright © 2025 Matthew Dangerfield'
 theme = 'paper'
 
 [params]
-  twitter = 'superMDguy'
-  github = 'superMDguy'
+twitter = 'superMDguy'
+github = 'superMDguy'
+linkedin = 'matthew-dangerfield'
 
 [menu]
-  [[menu.main]]
-    identifier = "about"
-    name = "About"
-    url = "/about/"
-    weight = 10
+[[menu.main]]
+name = "About"
+url = "/about/"
+weight = 10
 
+[[menu.main]]
+name = "Projects"
+url = "/projects/"
+weight = 10
+
+[markup]
+[markup.goldmark]
+[markup.goldmark.renderer]
+unsafe = true
