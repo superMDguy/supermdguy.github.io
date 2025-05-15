@@ -2,9 +2,6 @@
 title: "A solution to async boilerplate in JavaScript ✨"
 author: "Matthew Dangerfield"
 date: 2018-10-10T00:01:46.285Z
-lastmod: 2019-08-23T14:14:32-07:00
-
-description: ""
 
 subtitle: "How to stop writing loading = true every time you make an HTTP request"
 
@@ -14,6 +11,8 @@ images:
 
 aliases:
   - "/a-solution-to-async-boilerplate-in-javascript-2fa717801c3b"
+
+tags: ['frontend']
 ---
 
 ![image](/post/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg)

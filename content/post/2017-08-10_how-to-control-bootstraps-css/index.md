@@ -2,11 +2,6 @@
 title: "How to control bootstrap’s css"
 author: "Matthew Dangerfield"
 date: 2017-08-10T17:05:43.937Z
-lastmod: 2019-08-23T14:14:29-07:00
-
-description: ""
-
-subtitle: "In our Angular 4 project, we’re using a datepicker from ng-bootstrap. It has a lot of features (such as date ranges, minimum/maximum date…"
 
 image: "/posts/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg"
 images:
@@ -14,6 +9,7 @@ images:
 
 aliases:
   - "/how-to-control-bootstraps-css-394f9928a499"
+tags: ['frontend']
 ---
 
 ![image](/post/2017-08-10_how-to-control-bootstraps-css/images/1.jpeg)

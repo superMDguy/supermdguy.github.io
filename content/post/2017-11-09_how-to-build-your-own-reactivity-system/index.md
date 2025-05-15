@@ -2,9 +2,6 @@
 title: "How to Build Your Own Reactivity System"
 author: "Matthew Dangerfield"
 date: 2017-11-09T22:14:34.378Z
-lastmod: 2019-08-23T14:14:30-07:00
-
-description: "A couple of months ago, I attended an in-person meetup at Frontend Masters called Vue.js Advanced Features from the Ground Up. It was really awesome because we got to learn about Vue.js from its…"
 
 subtitle: "Based on Vue.js’s reactivity system"
 
@@ -16,6 +13,7 @@ images:
 
 aliases:
   - "/how-to-build-your-own-reactivity-system-fc48863a1b7c"
+tags: ['frontend']
 ---
 
 ![image](/post/2017-11-09_how-to-build-your-own-reactivity-system/images/1.jpeg)
