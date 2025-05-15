@@ -9,6 +9,7 @@ theme = 'paper'
 twitter = 'superMDguy'
 github = 'superMDguy'
 linkedin = 'matthew-dangerfield'
+favicon = "/favicon.ico"
 
 [menu]
 [[menu.main]]
