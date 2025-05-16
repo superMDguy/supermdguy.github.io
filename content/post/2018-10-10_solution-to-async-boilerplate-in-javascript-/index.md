@@ -15,7 +15,7 @@ aliases:
 tags: ['frontend']
 ---
 
-![image](/post/2018-10-10_solution-to-async-boilerplate-in-javascript/images/1.jpeg)
+![image](./images/1.jpeg)
 
 [Source](https://en.wikipedia.org/wiki/Tuxedo#/media/File:Dinner_Jackets,_1898..jpg)
 
