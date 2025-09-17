@@ -9,7 +9,7 @@ In the game show "The Price is Right", contestants try to guess the price of a p
 
 ## Pure Strategy Equilibrium
 
-Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with CDF $F(v)$, supported on $[0, v_{\text{max}})$ (we assume $F$ is strictly increasing and the corresponding PDF is continuous for simplicity). Suppose we're playing with two contestants, who simultaneously makes guesses $x_1, x_2 \in [0, \infty]$. They receive a reward of 1 if they are closest to the randomly selected price $v$ without going over, and 0 otherwise (we'll ignore ties throughout the analysis). This leads to symmetric (expected) payoff functions
+Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with CDF $F(v)$, supported on $[0, v_{\text{max}})$ (we assume $F$ is strictly increasing and the corresponding PDF is continuous for simplicity). Suppose we're playing with two contestants, who simultaneously makes guesses $x_1, x_2 \in [0, v_{\text{max}})$. They receive a reward of 1 if they are closest to the randomly selected price $v$ without going over, and 0 otherwise (we'll ignore ties throughout the analysis). This leads to symmetric (expected) payoff functions
 
 $$
 f_1(x_1, x_2) = \begin{cases}
@@ -27,11 +27,11 @@ F(x_1) - F(x_2) &  x_1 > x_2 \\\\
 \end{cases}
 $$
 
-Note that the payoff depends only on $F(x)$. To simplify, we'll assume $F$ has an inverse, allowing us to express each player's action as a quantile: $q_1 = F(x_1)$ and $q_2 = F(x_2)$. Once we find the optimal quantile $q \in [0, 1]$, we can compute $F^{-1}(q) = x$ to get the correct bid. This will make it easier to work with arbitrary price distributions $\mathcal{D}$.
+You can play around with different strategies below to get a sense for how the payoff works:
 
 <div id="price-viz">
 <style>
-    #price-viz { border: 1px solid #ccc; padding: 20px; border-radius: 10px; max-width:900px; }
+    #price-viz { border: 1px solid #ccc; padding: 20px; max-width:900px; }
     .controls-container { margin: 12px 0; display:flex; align-items:center; gap:10px; }
     .value { min-width:48px; text-align:right; font-variant-numeric: tabular-nums; }
     .toggle-buttons { display: flex; gap: 5px; }
@@ -56,8 +56,8 @@ Note that the payoff depends only on $F(x)$. To simplify, we'll assume $F$ has a
 
 <div class="controls-container">
     <label>x₁:</label>
-    <input type="range" id="slider-x1" min="0" max="10" step="0.01" value="2" />
-    <div class="value" id="label-x1">2.00</div>
+    <input type="range" id="slider-x1" min="0" max="20" step="0.01" value="7" />
+    <div class="value" id="label-x1">7.00</div>
     <div style="flex-grow: 1;"></div>
     <div class="toggle-buttons">
         <button class="toggle-btn" id="btn-low" data-value="low">Low x₂</button>
@@ -73,7 +73,7 @@ Note that the payoff depends only on $F(x)$. To simplify, we'll assume $F$ has a
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.6/jstat.js" integrity="sha512-MN0us5YWgC/39SjILvwt7/54yevWDlXVmzhVEfxGfnLGdyEoGisHb4ycAnk4BrT+47w8qj2LMjRr4bNeGZfYNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
   // Distribution parameters
-  const mu = 5, sigma = 1.5;
+  const mu = 10, sigma = 2;
 
   // jStat provides normal.pdf(x, mean, sd) and normal.cdf(x, mean, sd)
   function pdf(x) { return jStat.normal.pdf(x, mu, sigma); }
@@ -160,7 +160,7 @@ Note that the payoff depends only on $F(x)$. To simplify, we'll assume $F$ has a
     };
 
     // Use Plotly.react to efficiently update the plot
-    Plotly.react('plot', [tracePDF, region, lineX1, lineX2], layout, {responsive: true});
+    Plotly.react('plot', [tracePDF, region, lineX1, lineX2], layout, {responsive: true, staticPlot: true});
   }
 
   // wire up slider
@@ -198,6 +198,8 @@ Note that the payoff depends only on $F(x)$. To simplify, we'll assume $F$ has a
   updatePlot();
 </script>
 </div>
+
+Note that the payoff depends only on $F(x)$. To simplify, we'll assume $F$ has an inverse, allowing us to express each player's action as a quantile: $q_1 = F(x_1)$ and $q_2 = F(x_2)$. Once we find the optimal quantile $q \in [0, 1]$, we can compute $F^{-1}(q) = x$ to get the correct bid. This will make it easier to work with arbitrary price distributions $\mathcal{D}$.
 
 Let's analyze the [best response](https://en.wikipedia.org/wiki/Best_response) [function](https://math.stackexchange.com/questions/293404/finding-mixed-nash-equilibria-in-continuous-games) for each contestant. This is a concept from game theory that finds the optimal choice for one player, given what the other player has chosen. When an action is a mutual best response, neither player would be choose to play differently, given what the other player has played. This leads to [Nash Equilibrium](https://en.wikipedia.org/wiki/Nash_equilibrium). So finding the best response for each player is the first step to determining if an equilibrium solution is possible.
 
@@ -241,17 +243,13 @@ $$
 g(q_1) - q_1 g(q_1) - \int_0^1 g(q_2) dq_2 = 0
 $$
 
-Since $g$ must be a PDF that integrates to 1, we can simplify to
+Since $g$ must be a PDF that integrates to 1, we can simplify to $g(q_1)(1 -q_1) = 1$, implying $g(q_1) = \frac{1}{1-q_1}$. Note that this doesn't integrate to 1 over the full $[0, 1]$ domain of our quantile support, so we need to set it to 0 some places. We can decide where to set it to 0 by going back to our payoff function and finding the support where our PDF maximizes our payoff. Mathematically, we want to choose some $a$ and $b$ such that $\int_a^b \frac{1}{1-q} dq = 1$.
+
+Evaluating the integral gives $\ln\left(\frac{1-a}{1-b}\right)=1$, so $b = \frac{a + e - 1}{e}$. Plugging this back into our original payoff function gives:
 
 $$
-g(q_1)(1 -q_1) = 1 \\\\
-g(q_1) = \frac{1}{1-q_1}
-$$
-
-Note that this doesn't integrate to 1 over the full $[0, 1]$ domain of our quantile support, so we need to set it to 0 some places. We need to choose some $a$ and $b$ such that $\int_a^b \frac{1}{1-q} dq = 1$. Evaluating the integral gives $\ln\left(\frac{1-a}{1-b}\right)=1$, which means we need $\frac{1-a}{1-b} = e$ or $b = \frac{a + e - 1}{e}$. Plugging this back into our original payoff function gives:
-
-$$
-\int_a^{q_1} \frac{1 - q_1}{1 - q_2} dq_2 + \int_{q_1}^{\frac{a + e - 1}{e}} \frac{q_2 - q_1}{1 - q_2} dq_2
+\mathbb{E_{q_2}} \big[ f_1(q_1, q_2) \big]
+=\int_a^{q_1} \frac{1 - q_1}{1 - q_2} dq_2 + \int_{q_1}^{\frac{a + e - 1}{e}} \frac{q_2 - q_1}{1 - q_2} dq_2
 = \frac{1-a}{e}
 $$
 
@@ -276,11 +274,13 @@ To see how well this strategy performs, I ran a simulation where two players pla
 
 I thought this would be my moment! I'd show how the equilbrium strategy smokes any pure strategy, and move on. However, that's not what happened at all. Around the 33-68 percentile range (exactly where a normal player would be guessing), the pure strategy performs _better_ than the mixed strategy! How did that happen?
 
-It turns out that because it's possible for both players to go over, this isn't a zero-sum game. Because of that, the equilibrium strategy isn't necessarily dominant. It's only optimal against a player who's also using the equilibrium strategy. So if you actually were to get on the show, it'd probably be best to go for either the 50 or 0 percentile strategy, as described above.
+It turns out that because it's possible for both players to go over, this isn't a zero-sum game. Because of that, the equilibrium strategy isn't necessarily dominant. It's only optimal against a player who's also using the equilibrium strategy. That doesn't mean it's useless though.
 
-The mixed strategy shines because it puts a cap on the win rate of your opponent. No matter what strategy your opponent plays, they cannot win more than ~36.8% of the time. In the rock paper scissors example from earlier, you'll only win 1/3 of the time against someone who plays rock, so it might seem like a paper-only strategy would be better. But that would remove the protection you get from playing the mixed strategy, which guarantees you're unpredictable enough to not get defeated more than 1/3 of the time
+The equilibrium strategy shines because it puts a cap on the win rate of your opponent. No matter what strategy your opponent plays, they cannot win more than ~36.8% of the time. In the rock paper scissors example from earlier, you'll only win 1/3 of the time against someone who plays rock, so it might seem like a paper-only strategy would be better. But that would remove the protection you get from playing the mixed strategy, which guarantees you're unpredictable enough to not get defeated more than 1/3 of the time.
 
 ## Conclusion
+
+If you actually were to get on the show, it'd probably be best to go for either the 50 or 0 percentile strategy, as described above.
 
 <!--## Original Approach
 
@@ -317,5 +317,5 @@ $$
 -->
 
 <style>
-img { border-radius: 16px; }
+img, #price-viz, .js-plotly-plot .plotly .main-svg { border-radius: 16px; }
 </style>
