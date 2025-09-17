@@ -14,6 +14,7 @@ from typing import Callable, Optional, Union
 from scipy import stats
 from scipy.stats.distributions import t
 from tqdm import tqdm
+import numpy as np
 
 
 @dataclass
@@ -32,18 +33,22 @@ class SimulationResult:
     n: int
 
 
-type PIRStrategy = Union[Callable[[PIRProduct], float], float]
+type PIRStrategy = Union[Callable[[PIRProduct], float], float, np.ndarray]
 
 
 def simulate(product: PIRProduct, strat1: PIRStrategy, strat2: PIRStrategy, n=100_000):
     true_price = np.maximum(np.random.normal(product.mu, product.sigma, n), np.zeros(n))
     if isinstance(strat1, (int, float)):
         strat1_guess = np.full(n, strat1)
+    elif isinstance(strat1, np.ndarray):
+        strat1_guess = strat1
     else:
         strat1_guess = np.array([strat1(product) for _ in range(n)])
 
     if isinstance(strat2, (int, float)):
         strat2_guess = np.full(n, strat2)
+    elif isinstance(strat2, np.ndarray):
+        strat2_guess = strat2
     else:
         strat2_guess = np.array([strat2(product) for _ in range(n)])
 
@@ -303,10 +308,93 @@ def compare_all_percentiles(product):
     fig.write_image("percentile_vs_percentile.png", scale=3)
 
 
+def sample_g(n_samples: int):
+    # Draw uniform(0,1) samples
+    u = np.random.rand(n_samples)
+    # Inverse CDF transform
+    q = 1 - np.exp(-u)
+    # Enforce support explicitly
+    q = np.minimum(q, 1 - np.exp(-1))
+    return q
+
+
+def compare_g_to_percentiles(product: PIRProduct):
+    n_samples = 100_000
+    # Generate original samples
+    g_sample_quantiles = sample_g(n_samples)
+    g_sample_bids = stats.norm.ppf(g_sample_quantiles, product.mu, product.sigma)
+
+    percentiles = np.arange(1, 100)
+    results = []
+    for p in tqdm(percentiles):
+        sim = simulate(
+            product, g_sample_bids, guess_percentile(p, product), n=n_samples
+        )
+        results.append((p, sim.strat1_win / sim.n * 100, sim.strat2_win / sim.n * 100))
+
+    results = np.array(results)
+    fig = px.line(
+        x=results[:, 0],
+        y=[results[:, 1], results[:, 2]],
+        labels={"x": "Percentile", "value": "Win Rate (%)", "variable": "Strategy"},
+        title="Mixed Strategy vs. Percentile Win Rate (n=100,000)",
+    )
+    fig.data[0].name = "Mixed Strategy"
+    fig.data[1].name = "Fixed Percentile Strategy"
+    fig.update_layout(yaxis_range=[0, 100], legend_title_text="")
+    fig.show()
+    # save
+    fig.write_image("g_vs_percentile.svg", scale=3)
+
+
+def draw_optimal():
+    # Define grid for plotting
+    q_grid = np.linspace(0, 1, 500)
+
+    # Define true PDF with support restriction
+    pdf = np.zeros_like(q_grid)
+    support_end = 1 - np.exp(-1)
+    mask = (q_grid >= 0) & (q_grid < support_end)
+    pdf[mask] = 1 / (1 - q_grid[mask])
+    # Create plotly figure
+    fig = go.Figure()
+
+    # Add filled PDF trace
+    fig.add_trace(
+        go.Scatter(
+            x=q_grid,
+            y=pdf,
+            mode="lines",
+            line=dict(color="blue", width=2),
+            fill="tozeroy",
+            fillcolor="rgba(0, 0, 255, 0.3)",  # Light blue fill
+            name="True PDF",
+        )
+    )
+
+    # Update layout with axis labels and title
+    fig.update_layout(
+        xaxis_title="q",
+        yaxis_title="Density",
+        title="Mixed Strategy Distribution",
+        xaxis=dict(range=[0, 1]),
+        yaxis=dict(rangemode="nonnegative"),  # Sets minimum to 0, maximum auto
+    )
+
+    # Display figure
+    fig.show()
+
+    # Save figure
+    fig.write_image("optimal_strategy.svg", scale=3)
+
+
 if __name__ == "__main__":
     television = PIRProduct(mu=550, sigma=300)
 
     # simulation = simulate(television, guess_mean, guess_percentile(51, television))
     # plot_results(simulation, "Guess Mean", "Guess 51st Percentile")
 
-    compare_all_percentiles(television)
+    # compare_all_percentiles(television)
+
+    draw_optimal()
+    compare_g_to_percentiles(television)
