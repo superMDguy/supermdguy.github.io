@@ -13,7 +13,7 @@ I initially thought this would be a puzzle in probability, but I quickly realize
 
 ## Mathematical Framing
 
-Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with an invertible CDF $F(v)$, supported on $[0, v_{\text{max}})$. During each game, the host selects a prize valued $V$. Two players then simultaneously makes guesses $x_1, x_2 \in [0, v_{\text{max}})$. They receive a reward of 1 if they are closest to the randomly selected price $V$ without going over, and 0 otherwise (we'll set ties as 0 as well to simplify the analysis). This leads to symmetric expected payoff functions
+Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with an invertible CDF $F(v)$, supported on $[0, v_{\text{max}})$. During each game, the host selects a prize valued $V$. Two players make simultaneous guesses $x_1, x_2 \in [0, v_{\text{max}})$. They receive a reward of 1 if they are closest to the randomly selected price $V$ without going over, and 0 otherwise (we'll set ties as 0 as well to simplify the analysis). This leads to symmetric expected payoff functions
 
 $$
 f_1(x_1, x_2) = \begin{cases}
@@ -59,7 +59,7 @@ Mathematically, the best response function is defined as $\beta_1(q_2) = \{ q_1 
 
 **(i)** Suppose $q_2 \geq 0.5$. Then for all $q_1 \leq q_2$, we have $f_1(q_1, q_2) = q_2 - q_1 \leq q_2 = f_1(0, q_2)$. And for all $q_1 > q_2$, we have $f_1(q_1, q_2) = 1-q_1 < 0.5 \leq q_2 = f_1(0, q_2)$. So in either case, $0$ is the best response.
 
-**(ii)** If $q_2 < 0.5$, suppose by way of contradiction that some $p \in [0,1]$ is the best response. If $p > q_2$, fix $\epsilon = \frac{p - q_2}{2}$. Then $f_1(p, q_2) = 1-p < 1 - (q_2 + \epsilon) = f_1(q_2 + \epsilon, q_2)$. If $p \leq q_2$, fix $\delta=\frac{0.5-q_2}{2}$. Then $f_1(p, q_2) = q_2 - p < 0.5 \leq 1 - (q_2 + \delta) = f_1(q_2 + \delta, q_2)$. In either case, going down closer to $q_2$ outperforms $p$. But you can always get a little closer to $q_2$! So the supremum is not attained in that direction, meaning there is no best response.
+**(ii)** If $q_2 < 0.5$, suppose by way of contradiction that some $p \in [0,1]$ is the best response. If $p > q_2$, fix $\epsilon = \frac{p - q_2}{2}$. Then $f_1(p, q_2) = 1-p < 1 - (q_2 + \epsilon) = f_1(q_2 + \epsilon, q_2)$. If $p \leq q_2$, fix $\delta=\frac{0.5-q_2}{2}$. Then $f_1(p, q_2) = q_2 - p < 0.5 \leq 1 - (q_2 + \delta) = f_1(q_2 + \delta, q_2)$. In either case, going down closer to $q_2$ outperforms $p$. But you can always get a little closer to $q_2$! So the supremum is never attained, meaning there is no best response.
 
 Hence the best response function, considering only pure strategies, is:
 
@@ -76,7 +76,7 @@ The only possible mutual best response is $(0, 0)$, but $0$ isn't a best respons
 
 ## Mixed Strategy Equilibrium
 
-It's tempting to stop right there and say there's no optimal way to play the game. But I was nerd sniped. I couldn't stop.
+It's tempting to stop right there and say there's no optimal way to play the game. But I was nerd-sniped. I couldn't stop.
 
 Game Theory gives us another option: [mixed strategy equilibria](https://saylordotorg.github.io/text_introduction-to-economic-analysis/s17-03-mixed-strategies.html). Even in games where there's no pure mutual best response, we can still find probability distributions over potential actions such that if each player chooses their actions according to their distribution, we can reach equilibrium.
 
