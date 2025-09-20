@@ -43,7 +43,7 @@ Many games like this one have countless possible strategies, which vary in effec
 
 Note that this doesn't mean it's the absolute best strategy regardless of your opponent's strategy (that would be a [dominant strategy](https://en.wikipedia.org/wiki/Strategic_dominance), which doesn't exist for all games). It also doesn't mean that your strategy is the one that leads to the mutual best outcome (a classic counterexample is the [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma)). It only means that no player can increase their expected payoff by switching strategies.
 
-Let's start by looking for a pure equilbrium, which would be a set of quantiles $q_1^\*$, $q_2^\*$ such that if Player 1 always plays $q_1^\*$ and Player 2 always plays $q_2^\*$, neither player would want to deviate.
+Let's start by looking for a pure equilibrium, which would be a set of quantiles $q_1^\*$, $q_2^\*$ such that if Player 1 always plays $q_1^\*$ and Player 2 always plays $q_2^\*$, neither player would want to deviate.
 
 The first step is finding the [best response function](https://en.wikipedia.org/wiki/Best_response) for each player. This is a concept from game theory that finds the optimal action for one player, given what the other player has chosen. If we can find a pair of actions that are mutual best responses, we have a Nash equilibrium.
 
@@ -55,7 +55,7 @@ Turns out, there isn't one! If your opponent goes above the median, your best op
 
 _Feel free to scroll past if you don't care about the math_
 
-Mathematically, the best response function is defined as $\beta_1(q_2) = \{ q_1 \in [0,1] : f_1(q_1, q_2) \geq f_1(p, q_2), \forall p \in [0,1]\}$. [^4] $\beta_2(q_1)$ is defined similarly. If there's some $q_1^\*, q_2^\*$ such that $q_1^\* \in \beta_1(q_2^\*)$ and $q_2^\* \in \beta_2(q_1^\*)$, we have a mutual best response, or Nash equilbirium. So once we compute $\beta_1(q_2)$, the symmetries in the payoff functions mean we have everything we need to determine whether there's a pure strategy Nash equilbrium. We'll solve for $\beta_1(q_2)$ by breaking it up into two cases:
+Mathematically, the best response function is defined as $\beta_1(q_2) = \{ q_1 \in [0,1] : f_1(q_1, q_2) \geq f_1(p, q_2), \forall p \in [0,1]\}$. [^4] $\beta_2(q_1)$ is defined similarly. If there's some $q_1^\*, q_2^\*$ such that $q_1^\* \in \beta_1(q_2^\*)$ and $q_2^\* \in \beta_2(q_1^\*)$, we have a mutual best response, or Nash equilbirium. So once we compute $\beta_1(q_2)$, the symmetries in the payoff functions mean we have everything we need to determine whether there's a pure strategy Nash equilibrium. We'll solve for $\beta_1(q_2)$ by breaking it up into two cases:
 
 **(i)** Suppose $q_2 \geq 0.5$. Then for all $q_1 \leq q_2$, we have $f_1(q_1, q_2) = q_2 - q_1 \leq q_2 = f_1(0, q_2)$. And for all $q_1 > q_2$, we have $f_1(q_1, q_2) = 1-q_1 < 0.5 \leq q_2 = f_1(0, q_2)$. So in either case, $0$ is the best response.
 
@@ -72,7 +72,7 @@ $$
 
 **Theorem:** Under the above assumptions, no mutual best response exists in pure strategies.
 
-The only possible mutual best response is $(0, 0)$, but $0$ isn't a best response when the opponent plays $0$. Hence there is no mutual best response or Nash Equilbrium for pure strategies.
+The only possible mutual best response is $(0, 0)$, but $0$ isn't a best response when the opponent plays $0$. Hence there is no mutual best response or Nash equilibrium for pure strategies.
 
 ## Mixed Strategy Equilibrium
 
@@ -80,7 +80,7 @@ It's tempting to stop right there and say there's no optimal way to play the gam
 
 Game Theory gives us another option: [mixed strategy equilibria](https://saylordotorg.github.io/text_introduction-to-economic-analysis/s17-03-mixed-strategies.html). Even in games where there's no pure mutual best response, we can still find probability distributions over potential actions such that if each player chooses their actions according to their distribution, we can reach equilibrium.
 
-A classic example is rock paper scissors. If you play rock and your opponent plays paper, you'll regret not doing scissors instead. No matter what, the losing player will wish they'd chosen a different strategy. However, if both players choose randomly between rock, paper, and scissors, there's no room for regret. Even though a player might wish they'd chosen differently in an individual loss, they still know that they couldn't have chosen a better _strategy_ to maximize their overall expected payoff. Since neither player can deviate and improve their payoff, that's a Nash equilbrium!
+A classic example is rock paper scissors. If you play rock and your opponent plays paper, you'll regret not doing scissors instead. No matter what, the losing player will wish they'd chosen a different strategy. However, if both players choose randomly between rock, paper, and scissors, there's no room for regret. Even though a player might wish they'd chosen differently in an individual loss, they still know that they couldn't have chosen a better _strategy_ to maximize their overall expected payoff. Since neither player can deviate and improve their payoff, that's a Nash equilibrium!
 
 The key idea in finding a mixed strategy equilibrium is ensuring you're **indifferent** to the action you choose, meaning all actions have equal expected value for you. If this wasn't the case, you'd be better off playing a different strategy that doesn't leave your action up to chance. We can solve for indifference by finding a distribution over your opponent's actions that make it so your expected value is constant.
 
@@ -132,11 +132,13 @@ This gives us an expected payoff of $e^{-1} \approx 0.368$.
 
 ### Analysis
 
+<!--- give intuition for the shape of the distribution-->
+
 To see how well this strategy performs, I ran a simulation where two players play against each other 100,000 times. Player 1 uses the optimal mixed strategy above, while Player 2 bids a fixed quantile. The price distribution is $V \sim \mathcal{N}(550, 300)$ (truncated).
 
 ![Mixed Strategy Win Comparison](g_vs_percentile.svg)
 
-I thought this would be my moment! I'd show how the equilbrium strategy smokes any pure strategy, and move on. However, that's not what happened at all. Around the 33-68 percentile range (exactly where a normal player would be guessing), the pure strategy performs _better_ than the mixed strategy! How did that happen?
+I thought this would be my moment! I'd show how the equilibrium strategy smokes any pure strategy, and move on. However, that's not what happened at all. Around the 33-68 percentile range (exactly where a normal player would be guessing), the pure strategy performs _better_ than the mixed strategy! How did that happen?
 
 It turns out that because it's possible for both players to go over, this isn't a zero-sum game. Because of that, the equilibrium strategy isn't necessarily dominant. It's only optimal against a player who's also using the equilibrium strategy. That doesn't mean it's useless though.
 
