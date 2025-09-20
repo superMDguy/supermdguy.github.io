@@ -1,15 +1,19 @@
 ---
 title: "Is the Price Right?"
-date: 2025-09-20T22:54:53-06:00
+date: 2025-09-20T05:54:53-06:00
 math: true
 localKatex: true
 ---
 
-In the game show "The Price is Right", contestants try to guess the price of a prize. The contestant whose bid is closest to the actual price of the prize, without going over, wins and gets to advance in the competition Assume you're a contestant, and you somehow know the exact distribution of prices for the prize. Would you be able to win?
+In the game show _The Price is Right_, players try to guess the price of a prize. The player whose bid is closest to the actual price of the prize, without going over, wins and gets to advance in the competition.
+
+For some unknowable reason, I recently became obsessed with figuring out the optimal way to play the game. Assuming I was a player who somehow knew the exact distribution of prices for the prize, I thought there had to be some sort of optimal guess to make.
+
+I initially thought this would be a puzzle in probability, but I quickly realized that it has far more to do with game theory. If there weren't any competitors, it'd be easy! Just guess $0, and you're guaranteed to never go over. The real challenge comes from the dynamics that come from multiple players. Intuitively, it would make sense to go a little bit under the median price, to make sure you don't go over while still being close to the correct value. But how much under? Go too far down, and another player will probably beat you. Turns out the optimal strategy was more convoluted than I thought.
 
 ## Mathematical Framing
 
-Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with an invertible CDF $F(v)$, supported on $[0, v_{\text{max}})$. During each game, the host selects a prize valued $V$. Two contestants then simultaneously makes guesses $x_1, x_2 \in [0, v_{\text{max}})$. They receive a reward of 1 if they are closest to the randomly selected price $V$ without going over, and 0 otherwise (we'll set ties as 0 as well to simplify the analysis). This leads to symmetric (expected) payoff functions:
+Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with an invertible CDF $F(v)$, supported on $[0, v_{\text{max}})$. During each game, the host selects a prize valued $V$. Two players then simultaneously makes guesses $x_1, x_2 \in [0, v_{\text{max}})$. They receive a reward of 1 if they are closest to the randomly selected price $V$ without going over, and 0 otherwise (we'll set ties as 0 as well to simplify the analysis). This leads to symmetric expected payoff functions
 
 $$
 f_1(x_1, x_2) = \begin{cases}
@@ -35,13 +39,25 @@ Note that the payoff depends only on $F(x)$. To simplify, we'll assume $F$ has a
 
 ## Pure Strategy Equilibrium
 
-Let's analyze the [best response function](https://en.wikipedia.org/wiki/Best_response) for each contestant. This is a concept from game theory that finds the optimal choice for one player, given what the other player has chosen. When an action is a mutual best response, neither player would be choose to play differently, given what the other player has played. This leads to [Nash Equilibrium](https://en.wikipedia.org/wiki/Nash_equilibrium). So finding the best response for each player is the first step to determining if an equilibrium solution is possible.
+Many games like this one have countless possible strategies, which vary in effectiveness depending on which strategy the other player is using. Because of this, there's often not one "best" strategy. The [Nash equilibrium](https://en.wikipedia.org/wiki/Nash_equilibrium) provides a mathematical framework for analyzing the effectiveness of different strategies. The Nash equilibrium for a game is a set of strategies for each player such that no player can increase their payoff by switching to a different strategy.
+
+Note that this doesn't mean it's the absolute best strategy regardless of your opponent's strategy (that would be a [dominant strategy](https://en.wikipedia.org/wiki/Strategic_dominance), which doesn't exist for all games). It also doesn't mean that your strategy is the one that leads to the mutual best outcome (a classic counterexample is the [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma)). It only means that no player can increase their expected payoff by switching strategies.
+
+Let's start by looking for a pure equilbrium, which would be a set of quantiles $q_1^\*$, $q_2^\*$ such that if Player 1 always plays $q_1^\*$ and Player 2 always plays $q_2^\*$, neither player would want to deviate.
+
+The first step is finding the [best response function](https://en.wikipedia.org/wiki/Best_response) for each player. This is a concept from game theory that finds the optimal action for one player, given what the other player has chosen. If we can find a pair of actions that are mutual best responses, we have a Nash equilibrium.
+
+Let's look at how this applies to _The Price is Right_. Try playing around with the chart above to see if you can find a mutual best response.
+
+Turns out, there isn't one! If your opponent goes above the median, your best option is to drop to $0 to win whenever they go over (which will be the majority of the time). On the other hand, if they go below the median, you can go slightly above them to block them from winning. [^2] Note, though, that neither of these leads to a mutual best response. If your opponent plays $0, you can match them by going to the median. And if your opponent edges above you, you can do the same to them...and so on until you're both guaranteed to go over.[^3]
 
 ### Proof
 
-Mathematically, the best response function is defined as $\beta_1(q_2) = \{ q_1 \in [0,1] : f_1(q_1, q_2) \geq f_q(p, q_2), \forall p \in [0,1]\}$. [^2] $\beta_2(q_1)$ is defined similarly. If there's some $q_1^\*, q_2^\*$ such that $q_1^\* \in \beta_1(q_2^\*)$ and $q_2^\* \in \beta_2(q_1^\*)$, we have a mutual best response, or Nash equilbirium. So once we compute $\beta_1(q_2)$, the symmetries in the payoff functions mean we have everything we need to determine whether there's a pure strategy Nash equilbrium. We'll solve for $\beta_1(q_2)$ by breaking it up into two cases:
+_Feel free to scroll past if you don't care about the math_
 
-**(i)** Suppose $q_2 \geq 0.5$. Then for all $q_1 \leq q_2$, we have $f_1(q_1, q_2) = q_2 - q_1 \leq q_2 = f_1(0, q_2)$. And for all $q_1 > q_2$, we have $f_1(q_1, q_2) = 1-q_1 < 0.5 \leq q_2 = f_1(0, q_2)$. So in either case, $0$ is the best response.[^3]
+Mathematically, the best response function is defined as $\beta_1(q_2) = \{ q_1 \in [0,1] : f_1(q_1, q_2) \geq f_1(p, q_2), \forall p \in [0,1]\}$. [^4] $\beta_2(q_1)$ is defined similarly. If there's some $q_1^\*, q_2^\*$ such that $q_1^\* \in \beta_1(q_2^\*)$ and $q_2^\* \in \beta_2(q_1^\*)$, we have a mutual best response, or Nash equilbirium. So once we compute $\beta_1(q_2)$, the symmetries in the payoff functions mean we have everything we need to determine whether there's a pure strategy Nash equilbrium. We'll solve for $\beta_1(q_2)$ by breaking it up into two cases:
+
+**(i)** Suppose $q_2 \geq 0.5$. Then for all $q_1 \leq q_2$, we have $f_1(q_1, q_2) = q_2 - q_1 \leq q_2 = f_1(0, q_2)$. And for all $q_1 > q_2$, we have $f_1(q_1, q_2) = 1-q_1 < 0.5 \leq q_2 = f_1(0, q_2)$. So in either case, $0$ is the best response.
 
 **(ii)** If $q_2 < 0.5$, suppose by way of contradiction that some $p \in [0,1]$ is the best response. If $p > q_2$, fix $\epsilon = \frac{p - q_2}{2}$. Then $f_1(p, q_2) = 1-p < 1 - (q_2 + \epsilon) = f_1(q_2 + \epsilon, q_2)$. If $p \leq q_2$, fix $\delta=\frac{0.5-q_2}{2}$. Then $f_1(p, q_2) = q_2 - p < 0.5 \leq 1 - (q_2 + \delta) = f_1(q_2 + \delta, q_2)$. In either case, going down closer to $q_2$ outperforms $p$. But you can always get a little closer to $q_2$! So the supremum is not attained in that direction, meaning there is no best response.
 
@@ -60,11 +76,17 @@ The only possible mutual best response is $(0, 0)$, but $0$ isn't a best respons
 
 ## Mixed Strategy Equilibrium
 
-It's tempting to stop there and say there's no optimal way to play the game. But Game Theory gives us another option: [mixed strategy equilibria](https://saylordotorg.github.io/text_introduction-to-economic-analysis/s17-03-mixed-strategies.html). The idea is that even in games where there's no pure mutual best response, we can still find probability distributions over potential actions such that if each player chooses their actions according to their distribution, we can reach equilibrium.
+It's tempting to stop right there and say there's no optimal way to play the game. But I was nerd sniped. I couldn't stop.
 
-A classic example is rock paper scissors. If you play rock and your opponent plays paper, you'll regret not doing scissors instead. In fact, no matter what, the losing player will wish they'd chosen a different strategy. However, if both players choose to select randomly between rock/paper/scissors, there's no more room for regret. Even though a player might wish they'd chosen differently in an individual loss, they still know that they couldn't have chosen a better _strategy_ to maximize their overall expected payoff.
+Game Theory gives us another option: [mixed strategy equilibria](https://saylordotorg.github.io/text_introduction-to-economic-analysis/s17-03-mixed-strategies.html). Even in games where there's no pure mutual best response, we can still find probability distributions over potential actions such that if each player chooses their actions according to their distribution, we can reach equilibrium.
 
-The key idea in finding a mixed strategy equilibrium is ensuring you're **indifferent** to the action you choose, meaning all actions have equal expected value for you. If this wasn't the case, you'd be better off playing a different strategy that doesn't leave your action up to chance. We can solve for indifference by finding a distribution over your opponent's actions that make it so your expected value is constant. Put mathematically, this means solving
+A classic example is rock paper scissors. If you play rock and your opponent plays paper, you'll regret not doing scissors instead. No matter what, the losing player will wish they'd chosen a different strategy. However, if both players choose randomly between rock, paper, and scissors, there's no room for regret. Even though a player might wish they'd chosen differently in an individual loss, they still know that they couldn't have chosen a better _strategy_ to maximize their overall expected payoff. Since neither player can deviate and improve their payoff, that's a Nash equilbrium!
+
+The key idea in finding a mixed strategy equilibrium is ensuring you're **indifferent** to the action you choose, meaning all actions have equal expected value for you. If this wasn't the case, you'd be better off playing a different strategy that doesn't leave your action up to chance. We can solve for indifference by finding a distribution over your opponent's actions that make it so your expected value is constant.
+
+### Mixed Equilibrium Derivation
+
+Put mathematically, this means solving
 
 $$
 \mathbb{E}_{q_2}\big[ f_1(q_1, q_2) \big]
@@ -125,7 +147,7 @@ The equilibrium strategy shines because it puts a cap on the win rate of your op
 If you actually were to get on the show, it'd probably be best to go for either the 50 or 0 percentile strategy, as described above.
 
 <!--## Original Approach
-Let $p \sim \mathcal{N}(\mu, \sigma^2)$ be the price of the prize, and let $\hat{p}$ be the contestant's guess. The contestant wins if $\hat{p} \leq p$. Let's model this with a reward function $R$:
+Let $p \sim \mathcal{N}(\mu, \sigma^2)$ be the price of the prize, and let $\hat{p}$ be the player's guess. The player wins if $\hat{p} \leq p$. Let's model this with a reward function $R$:
 
 $$
 R(p, \hat{p}) = \begin{cases}
@@ -152,9 +174,11 @@ $$
     The proudest moment of my life is when I explained this to ChatGPT and it reluctantly admitted I was right.
     ![roasted_chatgpt.JPG](roasted_chatgpt.JPG)
 
-[^2]: https://math.stackexchange.com/a/293509
+[^2]: Unless you're playing against [this guy](https://www.youtube.com/watch?v=8lAJZMF830s)
 
-[^3]: Unless you're [this guy](https://www.youtube.com/watch?v=8lAJZMF830s), apparently
+[^3]: Reminiscent of the game [Chicken](<https://en.wikipedia.org/wiki/Chicken_(game)>)
+
+[^4]: https://math.stackexchange.com/a/293509
 
 <style>
 img, #price-viz, .js-plotly-plot .plotly .main-svg { border-radius: 16px; }
