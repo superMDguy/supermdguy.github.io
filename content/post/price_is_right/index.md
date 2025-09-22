@@ -126,21 +126,19 @@ g(q) = \begin{cases}
 \end{cases}
 $$
 
-![Mixed Strategy Distribution](optimal_strategy.svg)
-
-This gives us an expected payoff of $e^{-1} \approx 0.368$.
-
 ### Analysis
 
-<!--- give intuition for the shape of the distribution-->
+![Mixed Strategy Distribution](optimal_strategy.svg)
 
-To see how well this strategy performs, I ran a simulation where two players play against each other 100,000 times. Player 1 uses the optimal mixed strategy above, while Player 2 bids a fixed quantile. The price distribution is $V \sim \mathcal{N}(550, 300)$ (truncated).
+This makes some intuitive sense. The mean bid is $e^{-1} \approx 0.368$, which fits my original intuition of going a little under the median. However, the distribution also goes up to $1 - e^{-1} \approx 0.632$, which allows for the chance of higher bids. Even though a bid above the median is dangerous, _never_ bidding over the median is exploitable, since your opponent can dominate by going slightly above you. It makes sense that there's a tipping point where that's no longer worth it though.
+
+According to the model, the expected payoff is $e^{-1} \approx 0.368$. This means that, pitted against itself, both sides will win about 36% of the time, implying both will go over about 28% of the time. To see how well this strategy performs, I ran a simulation where two players play against each other 100,000 times. Player 1 uses the optimal mixed strategy above, while Player 2 bids a fixed quantile. The price distribution is $V \sim \mathcal{N}(550, 300)$ (truncated).
 
 ![Mixed Strategy Win Comparison](g_vs_percentile.svg)
 
-I thought this would be my moment! I'd show how the equilibrium strategy smokes any pure strategy, and move on. However, that's not what happened at all. Around the 33-68 percentile range (exactly where a normal player would be guessing), the pure strategy performs _better_ than the mixed strategy! How did that happen?
+I thought this would be my moment! The equilibrium strategy would smokes any pure strategy, showing the awe-inspiring power of game theory. But that's not what happened at all. Around the 33-68 percentile range (exactly where a normal player would be guessing), the pure strategy performs _better_ than the mixed strategy! How did that happen?
 
-It turns out that because it's possible for both players to go over, this isn't a zero-sum game. Because of that, the equilibrium strategy isn't necessarily dominant. It's only optimal against a player who's also using the equilibrium strategy. That doesn't mean it's useless though.
+The equilibrium strategy guarantees that a player can't deviate from the strategy and perform better. And that's true, you can see that playing the 50th percentile strategy gets the same $\sim 0.368$ payoff attained by the equilibrium strategy. So deviating didn't lead to a better payoff for the 50th percentile player. However, it did lead to a worse payoff for the equilibrium player. Since it's possible for both players to go over, this isn't a zero-sum game, which is why it's possible for deviations from the equilibrium to reduce your opponent's payoff, even though you can't increase your own. You can see the non-zero-sum behavior at play here, since the "both go over" rate goes up.
 
 The equilibrium strategy shines because it puts a cap on the win rate of your opponent. No matter what strategy your opponent plays, they cannot win more than ~36.8% of the time. In the rock paper scissors example from earlier, you'll only win 1/3 of the time against someone who plays rock, so it might seem like a paper-only strategy would be better. But that would remove the protection you get from playing the mixed strategy, which guarantees you're unpredictable enough to not get defeated more than 1/3 of the time.
 
