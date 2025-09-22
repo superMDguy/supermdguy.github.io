@@ -1,6 +1,6 @@
-baseURL = 'https://superMDguy.github.io/'
+baseURL = 'https://beyondtheprior.com/'
 languageCode = 'en-us'
-title = "Matthew's Homepage"
+title = "Beyond the Prior"
 author = 'Matthew Dangerfield'
 copyright = 'Copyright © 2025 Matthew Dangerfield'
 theme = 'paper'
