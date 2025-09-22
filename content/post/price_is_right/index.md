@@ -13,7 +13,7 @@ I initially thought this would be a puzzle in probability, but I quickly realize
 
 ## Mathematical Framing
 
-Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with an invertible CDF $F(v)$, supported on $[0, v_{\text{max}})$. During each game, the host selects a prize valued $V$. Two players make simultaneous guesses $x_1, x_2 \in [0, v_{\text{max}})$. They receive a reward of 1 if they are closest to the randomly selected price $V$ without going over, and 0 otherwise (we'll set ties as 0 as well to simplify the analysis). This leads to symmetric expected payoff functions
+Let $V \sim \mathcal{D}$ be a random variable representing the true value of the prize, with an invertible CDF $F(v)$, supported on $[0, v_{\text{max}}]$. During each game, the host selects a prize valued $V$. Two players make simultaneous guesses $x_1, x_2 \in [0, v_{\text{max}}]$. They receive a reward of 1 if they are closest to the randomly selected price $V$ without going over, and 0 otherwise (we'll set ties to 0 as well to simplify the analysis). This leads to symmetric expected payoff functions
 
 $$
 f_1(x_1, x_2) = \begin{cases}
@@ -78,11 +78,13 @@ The only possible mutual best response is $(0, 0)$, but $0$ isn't a best respons
 
 It's tempting to stop right there and say there's no optimal way to play the game. But I was nerd-sniped. I couldn't stop.
 
-Game Theory gives us another option: [mixed strategy equilibria](https://saylordotorg.github.io/text_introduction-to-economic-analysis/s17-03-mixed-strategies.html). Even in games where there's no pure mutual best response, we can still find probability distributions over potential actions such that if each player chooses their actions according to their distribution, we can reach equilibrium.
+Game theory gives us another option: [mixed strategy equilibria](https://saylordotorg.github.io/text_introduction-to-economic-analysis/s17-03-mixed-strategies.html). Even in games where there's no pure mutual best response, we can still find probability distributions over potential actions such that if each player chooses their actions according to their distribution, we can reach equilibrium.
 
 A classic example is rock paper scissors. If you play rock and your opponent plays paper, you'll regret not doing scissors instead. No matter what, the losing player will wish they'd chosen a different strategy. However, if both players choose randomly between rock, paper, and scissors, there's no room for regret. Even though a player might wish they'd chosen differently in an individual loss, they still know that they couldn't have chosen a better _strategy_ to maximize their overall expected payoff. Since neither player can deviate and improve their payoff, that's a Nash equilibrium!
 
 The key idea in finding a mixed strategy equilibrium is ensuring you're **indifferent** to the action you choose, meaning all actions have equal expected value for you. If this wasn't the case, you'd be better off playing a different strategy that doesn't leave your action up to chance. We can solve for indifference by finding a distribution over your opponent's actions that make it so your expected value is constant.
+
+Since the payoff functions are symmetric, if you're indifferent to your opponent's actions, your opponent will be indifferent to your actions when you play using the same distribution. The mutual indifference will mean we've found a mixed equilibrium. When both players randomly select a quantile to play at according to this distribution, neither will be able to improve their payoff by switching to any other strategy.
 
 ### Mixed Equilibrium Derivation
 
@@ -130,7 +132,7 @@ $$
 
 ![Mixed Strategy Distribution](optimal_strategy.svg)
 
-This makes some intuitive sense. The mean bid is $e^{-1} \approx 0.368$, which fits my original intuition of going a little under the median. However, the distribution also goes up to $1 - e^{-1} \approx 0.632$, which allows for the chance of higher bids. Even though a bid above the median is dangerous, _never_ bidding over the median is exploitable, since your opponent can dominate by going slightly above you. It makes sense that there's a tipping point where that's no longer worth it though.
+Looking at the chart, this makes some intuitive sense. The mean bid is $e^{-1} \approx 0.368$, which fits my original intuition of going a little under the median. However, the distribution also goes up to $1 - e^{-1} \approx 0.632$, which allows for the chance of higher bids. Even though a bid above the median is dangerous, _never_ bidding over the median is exploitable, since your opponent can dominate by going slightly above you. It makes sense that there's a tipping point where that's no longer worth it though.
 
 According to the model, the expected payoff is $e^{-1} \approx 0.368$. This means that, pitted against itself, both sides will win about 36% of the time, implying both will go over about 28% of the time. To see how well this strategy performs, I ran a simulation where two players play against each other 100,000 times. Player 1 uses the optimal mixed strategy above, while Player 2 bids a fixed quantile. The price distribution is $V \sim \mathcal{N}(550, 300)$ (truncated).
 
