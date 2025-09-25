@@ -3,9 +3,10 @@ title: "Is the Price Right?"
 date: 2025-09-20T05:54:53-06:00
 math: true
 localKatex: true
+tags: ["math", "nerd-sniped"]
 ---
 
-In the game show _The Price is Right_, players try to guess the price of a prize. The player whose bid is closest to the actual price of the prize, without going over, wins and gets to advance in the competition.
+In the game show _The Price is Right_, players try to guess the price of a prize. The player whose bid is closest to the actual price of the prize, without going over, wins and gets to advance in the competition. For example, if the host shows a TV priced at $500, and Player 1 bids $450 while Player 2 bids $480, Player 2 wins. However, if Player 1 had bid $520 instead, they would have both gone over and neither would win.
 
 For some unknowable reason, I recently became obsessed with figuring out the optimal way to play the game. Assuming I was a player who somehow knew the exact distribution of prices for the prize, I thought there had to be some sort of optimal guess to make.
 
@@ -119,7 +120,7 @@ $$
 = \frac{1-a}{e}
 $$
 
-So to maximize our payoff, we should minimize $a$, leading to $a = 0$, $b = \frac{e-1}{e} = 1 - e^{-1}$. So our final mixed strategy distribution is:
+So to maximize our payoff[^5], we should minimize $a$, leading to $a = 0$, $b = \frac{e-1}{e} = 1 - e^{-1}$. So our final mixed strategy distribution is:
 
 $$
 g(q) = \begin{cases}
@@ -146,7 +147,7 @@ The equilibrium strategy shines because it puts a cap on the win rate of your op
 
 ## Conclusion
 
-If you actually were to get on the show, it'd probably be best to go for either the 50 or 0 percentile strategy, as described above.
+![Just guess 0](./bell_curve_meme.jpeg)
 
 <!--## Original Approach
 Let $p \sim \mathcal{N}(\mu, \sigma^2)$ be the price of the prize, and let $\hat{p}$ be the player's guess. The player wins if $\hat{p} \leq p$. Let's model this with a reward function $R$:
@@ -181,6 +182,8 @@ $$
 [^3]: Reminiscent of the game [Chicken](<https://en.wikipedia.org/wiki/Chicken_(game)>)
 
 [^4]: https://math.stackexchange.com/a/293509
+
+[^5]: I also played with other goals, like looking at the relative payoff $f_1(q_1, q_2) - f_2(q_1, q_2)$ and integrating over all possible $q_2$ values. I still got $a=0$ as the maximum regardless of which metric I optimzed for. Moving $a$ higher just makes you more likely to go over.
 
 <style>
 img, #price-viz, .js-plotly-plot .plotly .main-svg { border-radius: 16px; }
